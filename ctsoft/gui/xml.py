@@ -25,7 +25,7 @@ class Interpreter:
             elements = self.__content.findall("*")
 
             for el in elements:
-                parser = ParserNew(builder)
+                parser = Parser(builder)
                 parser.parseXml(el, {})
 
             return builder.getRoot()
@@ -37,7 +37,7 @@ class Interpreter:
         return xmlee.parse(self.__filename).getroot()
 
 
-class ParserNew:
+class Parser:
     def __init__(self, builder):
         self.__builder = builder
 
