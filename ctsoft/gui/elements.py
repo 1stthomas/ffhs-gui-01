@@ -9,11 +9,19 @@ import tkinter as tk
 
 
 class TkGuiExtender(object):
-    def __init__(self, master, attributes, element={}):
+    def __init__(self, master, attributes, element):
         super(TkGuiExtender, self).__init__()
         self.numerics = ["bd", "height", "ipadx", "ipady", "width"]
         self.setParent(master)
         self.setOptions(element.attrib)
+        self.doPack(element)
+
+    def doPack(self, element):
+        pack = element.findall("pack")
+        if pack is not None:
+            self.pack(pack[0].attrib)
+        else:
+            self.pack()
 
     def getParent(self):
         return self.__parent
@@ -55,8 +63,6 @@ class TkFrame(tk.Frame, TkGuiExtender):
 
 class TkLabel(tk.Label, TkGuiExtender):
     def __init__(self, master, *args, **kw):
-        print("master: _____ ", master)
-        print("args: _____ ", *args)
         tk.Label.__init__(self, master)
         TkGuiExtender.__init__(self, master, *args, **kw)
 #        super(TkLabel, self).__init__(master, *args, **kw)

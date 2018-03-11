@@ -66,8 +66,7 @@ class Builder:
 
     def create(self, element, parent):
         if element.tag == "pack":
-            print("_____ pack", self.__current)
-            self.__current.pack(element.attrib)
+            return
         elif element.tag == "button":
             self.__current = ctsel.TkButton(parent, element.attrib, element)
         elif element.tag == "entry":
