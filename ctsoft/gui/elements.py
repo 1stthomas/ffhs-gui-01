@@ -9,7 +9,7 @@ import tkinter as tk
 
 
 class TkGuiExtender(object):
-    def __init__(self, master, attributes, element):
+    def __init__(self, master, element):
         super(TkGuiExtender, self).__init__()
         self.numerics = ["bd", "height", "ipadx", "ipady", "width"]
         self.setParent(master)

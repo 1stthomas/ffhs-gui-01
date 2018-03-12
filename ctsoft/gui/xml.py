@@ -68,17 +68,16 @@ class Builder:
         if element.tag == "pack":
             return
         elif element.tag == "button":
-            self.__current = ctsel.TkButton(parent, element.attrib, element)
+            self.__current = ctsel.TkButton(parent, element)
         elif element.tag == "entry":
-            self.__current = ctsel.TkEntry(parent, element.attrib, element)
+            self.__current = ctsel.TkEntry(parent, element)
         elif element.tag == "frame":
-            self.__current = ctsel.TkFrame(parent, element.attrib, element)
+            self.__current = ctsel.TkFrame(parent, element)
         elif element.tag == "label":
-            self.__current = ctsel.TkLabel(parent, element.attrib, element)
+            self.__current = ctsel.TkLabel(parent, element)
         elif element.tag == "window":
-            self.__root = tk.Tk()
-            self.__root.title("Thomastest")
-            self.__current = self.__root
+            self.__current = ctsel.TkWindow(element)
+            self.__root = self.__current
         else:
             print("=> tag ", element.tag, " does not exist.")
 
