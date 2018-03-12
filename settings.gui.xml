@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui>
-    <window>
+    <window title="testest 123.." minsize-x="500" minsize-y="300" bg="#666">
         <frame bd="3" bg="#EEEEEE" relief="sunken">
             <pack expand="true" fill="none" ipadx="80" />
             <frame bd="20" bg="#0000FF" relief="sunken">
