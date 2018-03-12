@@ -66,3 +66,13 @@ class TkLabel(tk.Label, TkGuiExtender):
         tk.Label.__init__(self, master)
         TkGuiExtender.__init__(self, master, *args, **kw)
 #        super(TkLabel, self).__init__(master, *args, **kw)
+
+
+class TkWindow(tk.Tk):
+    def __init__(self, element, *args, **kw):
+        tk.Tk.__init__(self)
+        self.setOptions(element.attrib)
+
+    def setOptions(self, attributes):
+        if "title" in attributes:
+            self.title(attributes["title"])

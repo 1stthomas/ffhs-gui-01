@@ -81,14 +81,6 @@ class Builder:
         else:
             print("=> tag ", element.tag, " does not exist.")
 
-    def createRoot(self, element):
-        if element.tag == self.__windowName:
-            self.__root = tk.Tk()
-            self.__root.title("Thomastest")
-            self.__current = self.__root
-        else:
-            self.__root -1
-
     def getCurrent(self):
         return self.__current
 
