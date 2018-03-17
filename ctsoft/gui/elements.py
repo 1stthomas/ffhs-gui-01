@@ -11,7 +11,10 @@ import tkinter as tk
 class TkBase(object):
     def __init__(self):
         super(TkBase, self).__init__()
-        self.numerics = ["bd", "height", "ipadx", "ipady", "width"]
+        self.numerics = ["bd", "height", "ipadx", "ipady", "maxsize-x",
+                         "maxsize-y", "minsize-x", "minsize-y", "padx", "pady",
+                         "xscrollincrement", "yscrollincrement", "width",
+                         "wraplength"]
 
     def setOptions(self, options):
         for key in options:
