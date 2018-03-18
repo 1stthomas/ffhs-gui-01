@@ -48,14 +48,14 @@ class Interpreter:
         parent = self.__builder.getCurrent()
 
         if self.check4Id(element) is True:
-            self.setElementById(element, parent)
+            self.addElementById(element, parent)
 
         elements = element.findall("*")
 
         for el in elements:
             self.parseXml(el, parent)
 
-    def setElementById(self, elementXml, elementTk):
+    def addElementById(self, elementXml, elementTk):
         self.__controller.addWidget(elementXml.attrib["id"], elementTk)
 
     def setIdentifier(self, identifier):
@@ -84,7 +84,8 @@ class Builder:
         if element.tag in self.__skippedWidgets:
             return
         elif element.tag in self.__widgets:
-            class_ = getattr(ctsel, "Tk" + element.tag.capitalize())
+            widgetClassName = self.getWidgetClassName(element.tag)
+            class_ = getattr(ctsel, widgetClassName)
             self.__current = class_(parent, element)
 #        elif element.tag == "button":
 #            self.__current = ctsel.TkButton(parent, element)
@@ -102,6 +103,16 @@ class Builder:
 
     def getRootName(self):
         return self.__rootName
+
+    def getWidgetClassName(self, tagName):
+        if tagName == "labelframe":
+            tagNameNew = "labelFrame"
+        elif tagName == "optionmenu":
+            tagNameNew = "optionMenu"
+        else:
+            tagNameNew = tagName
+        className = "Tk" + tagNameNew.capitalize()
+        return className
 
     def getWindowName(self):
         return self.__windowName
