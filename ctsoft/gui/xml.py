@@ -15,31 +15,25 @@ class Interpreter:
         self.__filename = filename
         self.__encoding = encoding
         self.__method = method
+        self.__builder = Builder()
 
         self.__content = self.getFileContent(self.__filename)
 
     def createElements(self):
-        builder = Builder()
 
-        if builder.checkRootTag(self.__content):
+        if self.__builder.checkRootTag(self.__content):
             elements = self.__content.findall("*")
 
             for el in elements:
-                parser = Parser(builder)
-                parser.parseXml(el, {})
+                self.parseXml(el, {})
 
-            return builder.getRoot()
+            return self.__builder.getRoot()
         else:
             print("The Element ", self.__content.tag, " is unkown.")
             return None
 
     def getFileContent(self, filename):
         return xmlee.parse(self.__filename).getroot()
-
-
-class Parser:
-    def __init__(self, builder):
-        self.__builder = builder
 
     def parseXml(self, element, parent):
         self.__builder.create(element, parent)
