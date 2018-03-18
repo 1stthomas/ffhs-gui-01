@@ -11,13 +11,21 @@ import ctsoft.gui.elements as ctsel
 
 
 class Interpreter:
-    def __init__(self, filename, encoding="UTF-8", method="xml"):
-        self.__filename = filename
+    def __init__(self, controller, filename, encoding="UTF-8", method="xml"):
+        self.__controller = controller
         self.__encoding = encoding
+        self.__filename = filename
+        self.__identifier = ""
         self.__method = method
         self.__builder = Builder()
 
         self.__content = self.getFileContent(self.__filename)
+
+    def check4Id(self, element):
+        if self.__identifier in element.attrib:
+            return True
+        else:
+            return False
 
     def createElements(self):
 
@@ -39,10 +47,19 @@ class Interpreter:
         self.__builder.create(element, parent)
         parent = self.__builder.getCurrent()
 
+        if self.check4Id(element) is True:
+            self.setElementById(element, parent)
+
         elements = element.findall("*")
 
         for el in elements:
             self.parseXml(el, parent)
+
+    def setElementById(self, elementXml, elementTk):
+        self.__controller.addWidget(elementXml.attrib["id"], elementTk)
+
+    def setIdentifier(self, identifier):
+        self.__identifier = identifier
 
 
 class Builder:

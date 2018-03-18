@@ -18,7 +18,9 @@ class TkBase(object):
 
     def setOptions(self, options):
         for key in options:
-            if key in self.numerics:
+            if key == "id":
+                continue
+            elif key in self.numerics:
                 self[key] = int(options[key])
             else:
                 self[key] = options[key]
