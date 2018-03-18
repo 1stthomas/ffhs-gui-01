@@ -11,16 +11,38 @@ import tkinter as tk
 class TkBase(object):
     def __init__(self):
         super(TkBase, self).__init__()
-        self.numerics = ["bd", "height", "ipadx", "ipady", "maxsize-x",
-                         "maxsize-y", "minsize-x", "minsize-y", "padx", "pady",
-                         "xscrollincrement", "yscrollincrement", "width",
-                         "wraplength"]
+        self.__numerics = ["bd", "height", "ipadx", "ipady", "maxsize-x",
+                           "maxsize-y", "minsize-x", "minsize-y", "padx",
+                           "pady", "xscrollincrement", "yscrollincrement",
+                           "width", "wraplength"]
+        self.methodToOptions = {}
+
+    def handle2WayOptions(self, element, remove=True):
+        for method in self.methodToOptions:
+            if self.methodToOptions[method][0] in element.attrib and \
+                    self.methodToOptions[method][1] in element.attrib:
+                method_ = getattr(self, method)
+                method_(element.attrib[self.methodToOptions[method][0]],
+                        element.attrib[self.methodToOptions[method][1]])
+                if remove:
+                    del element.attrib[self.methodToOptions[method][0]]
+                    del element.attrib[self.methodToOptions[method][1]]
+            elif self.methodToOptions[method][0] in element.attrib:
+                method_ = getattr(self, method)
+                method_(element.attrib[self.methodToOptions[method][0]])
+                if remove:
+                    del element.attrib[self.methodToOptions[method][0]]
+            elif self.methodToOptions[method][1] in element.attrib:
+                method_ = getattr(self, method)
+                method_(element.attrib[self.methodToOptions[method][1]])
+                if remove:
+                    del element.attrib[self.methodToOptions[method][1]]
 
     def setOptions(self, options):
         for key in options:
             if key == "id":
                 continue
-            elif key in self.numerics:
+            elif key in self.__numerics:
                 self[key] = int(options[key])
             else:
                 self[key] = options[key]
@@ -30,8 +52,6 @@ class TkWidget(TkBase):
     def __init__(self, master, element):
         super(TkWidget, self).__init__()
         self.setParent(master)
-        self.setOptions(element.attrib)
-        self.doPack(element)
 
     def doPack(self, element):
         pack = element.findall("pack")
@@ -50,127 +70,108 @@ class TkWidget(TkBase):
         self.__parent = parent
 
 
-class TkButton(tk.Button, TkWidget):
+class TkWidgetSimple(TkWidget):
+    def __init__(self, master, element):
+        super(TkWidget, self).__init__()
+        self.setOptions(element.attrib)
+        self.doPack(element)
+        
+
+
+class TkButton(tk.Button, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Button.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 #        super(TkButton, self).__init__(self, master, *args, **kw)
 
 
-class TkCanvas(tk.Canvas, TkWidget):
+class TkCanvas(tk.Canvas, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Canvas.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkCheckbutton(tk.Checkbutton, TkWidget):
+class TkCheckbutton(tk.Checkbutton, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Checkbutton.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkEntry(tk.Entry, TkWidget):
+class TkEntry(tk.Entry, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Entry.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkFrame(tk.Frame, TkWidget):
+class TkFrame(tk.Frame, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Frame.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkLabel(tk.Label, TkWidget):
+class TkLabel(tk.Label, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Label.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkLabelFrame(tk.LabelFrame, TkWidget):
+class TkLabelFrame(tk.LabelFrame, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.LabelFrame.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkListbox(tk.Listbox, TkWidget):
+class TkListbox(tk.Listbox, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Listbox.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkMenu(tk.Menu, TkWidget):
+class TkMenu(tk.Menu, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Menu.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkOptionMenu(tk.OptionMenu, TkWidget):
+class TkOptionMenu(tk.OptionMenu, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.OptionMenu.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkRadiobutton(tk.Radiobutton, TkWidget):
+class TkRadiobutton(tk.Radiobutton, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Radiobutton.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkScale(tk.Scale, TkWidget):
+class TkScale(tk.Scale, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Scale.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkText(tk.Text, TkWidget):
+class TkText(tk.Text, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Text.__init__(self, master)
-        TkWidget.__init__(self, master, *args, **kw)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
 class TkWindow(tk.Tk, TkBase):
     def __init__(self, element, *args, **kw):
         tk.Tk.__init__(self)
         TkBase.__init__(self)
-        self.setOptions(dict(element.attrib))
+        self.methodToOptions = {"maxsize": ("maxsize-x", "maxsize-y"),
+                                "minsize": ("minsize-x", "minsize-y"),
+                                "resizeable": ("resizeable-x",
+                                               "resizeable-y")}
+        self.setOptions(element)
 
-    def setOptions(self, attributes):
-        if "maxsize-x" in attributes and "maxsize-y" in attributes:
-            self.maxsize(attributes["maxsize-x"], attributes["maxsize-y"])
-            del attributes["maxsize-x"]
-            del attributes["maxsize-y"]
-        elif "maxsize-x" in attributes:
-            self.maxsize(attributes["maxsize-x"], None)
-            del attributes["maxsize-x"]
-        elif "maxsize-y" in attributes:
-            self.maxsize(None, attributes["maxsize-y"])
-            del attributes["maxsize-y"]
+    def setOptions(self, element):
+        self.handle2WayOptions(element)
 
-        if "minsize-x" in attributes and "minsize-y" in attributes:
-            self.minsize(attributes["minsize-x"], attributes["minsize-y"])
-            del attributes["minsize-x"]
-            del attributes["minsize-y"]
-        elif "minsize-x" in attributes:
-            self.minsize(attributes["minsize-x"], None)
-            del attributes["minsize-x"]
-        elif "minsize-y" in attributes:
-            self.minsize(None, attributes["minsize-y"])
-            del attributes["minsize-y"]
+        if "title" in element.attrib:
+            self.title(element.attrib["title"])
+            del element.attrib["title"]
 
-        if "resizable-x" in attributes and "resizable-y" in attributes:
-            self.resizable(attributes["resizable-x"], attributes["resizable-y"])
-            del attributes["resizable-x"]
-            del attributes["resizable-y"]
-        elif "minsize-x" in attributes:
-            self.resizable(attributes["resizable-x"], None)
-            del attributes["resizable-x"]
-        elif "minsize-y" in attributes:
-            self.resizable(None, attributes["resizable-y"])
-            del attributes["resizable-y"]
-
-        if "title" in attributes:
-            self.title(attributes["title"])
-            del attributes["title"]
-
-        TkBase.setOptions(self, attributes)
+        TkBase.setOptions(self, element.attrib)
