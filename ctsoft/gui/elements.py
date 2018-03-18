@@ -57,25 +57,76 @@ class TkButton(tk.Button, TkWidget):
 #        super(TkButton, self).__init__(self, master, *args, **kw)
 
 
+class TkCanvas(tk.Canvas, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Canvas.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkCheckbutton(tk.Checkbutton, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Checkbutton.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
 class TkEntry(tk.Entry, TkWidget):
     def __init__(self, master, *args, **kw):
         tk.Entry.__init__(self, master)
         TkWidget.__init__(self, master, *args, **kw)
-#        super(TkEntry, self).__init__(self, master, *args, **kw)
 
 
 class TkFrame(tk.Frame, TkWidget):
     def __init__(self, master, *args, **kw):
         tk.Frame.__init__(self, master)
         TkWidget.__init__(self, master, *args, **kw)
-#        super(TkFrame, self).__init__(master, *args, **kw)
 
 
 class TkLabel(tk.Label, TkWidget):
     def __init__(self, master, *args, **kw):
         tk.Label.__init__(self, master)
         TkWidget.__init__(self, master, *args, **kw)
-#        super(TkLabel, self).__init__(master, *args, **kw)
+
+
+class TkLabelFrame(tk.LabelFrame, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.LabelFrame.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkListbox(tk.Listbox, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Listbox.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkMenu(tk.Menu, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Menu.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkOptionMenu(tk.OptionMenu, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.OptionMenu.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkRadiobutton(tk.Radiobutton, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Radiobutton.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkScale(tk.Scale, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Scale.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
+
+
+class TkText(tk.Text, TkWidget):
+    def __init__(self, master, *args, **kw):
+        tk.Text.__init__(self, master)
+        TkWidget.__init__(self, master, *args, **kw)
 
 
 class TkWindow(tk.Tk, TkBase):
