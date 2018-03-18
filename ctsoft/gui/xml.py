@@ -68,7 +68,10 @@ class Builder:
         self.__root = None
         self.__rootName = "gui"
         self.__skippedWidgets = ["image", "pack"]
-        self.__widgets = ["button", "entry", "frame", "label"]
+        self.__widgets = ["button", "canvas", "checkbutton", "entry",
+                          "frame", "label", "labelframe", "listbox",
+                          "menu", "optionmenu", "radiobutton", "scale",
+                          "text"]
         self.__windowName = "window"
 
     def checkRootTag(self, element):
