@@ -68,6 +68,7 @@ class Builder:
         self.__root = None
         self.__rootName = "gui"
         self.__skippedWidgets = ["image", "pack"]
+        self.__widgets = ["button", "entry", "frame", "label"]
         self.__windowName = "window"
 
     def checkRootTag(self, element):
@@ -78,16 +79,12 @@ class Builder:
 
     def create(self, element, parent):
         if element.tag in self.__skippedWidgets:
-#        if element.tag == "pack":
             return
-        elif element.tag == "button":
-            self.__current = ctsel.TkButton(parent, element)
-        elif element.tag == "entry":
-            self.__current = ctsel.TkEntry(parent, element)
-        elif element.tag == "frame":
-            self.__current = ctsel.TkFrame(parent, element)
-        elif element.tag == "label":
-            self.__current = ctsel.TkLabel(parent, element)
+        elif element.tag in self.__widgets:
+            class_ = getattr(ctsel, "Tk" + element.tag.capitalize())
+            self.__current = class_(parent, element)
+#        elif element.tag == "button":
+#            self.__current = ctsel.TkButton(parent, element)
         elif element.tag == "window":
             self.__current = ctsel.TkWindow(element)
             self.__root = self.__current
