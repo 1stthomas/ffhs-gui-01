@@ -64,9 +64,10 @@ class Interpreter:
 
 class Builder:
     def __init__(self):
-        self.__current = {}
-        self.__root = {}
+        self.__current = None
+        self.__root = None
         self.__rootName = "gui"
+        self.__skippedWidgets = ["image", "pack"]
         self.__windowName = "window"
 
     def checkRootTag(self, element):
@@ -76,7 +77,8 @@ class Builder:
             return False
 
     def create(self, element, parent):
-        if element.tag == "pack":
+        if element.tag in self.__skippedWidgets:
+#        if element.tag == "pack":
             return
         elif element.tag == "button":
             self.__current = ctsel.TkButton(parent, element)
