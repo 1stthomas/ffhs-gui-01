@@ -17,7 +17,7 @@ class TkBase(object):
                            "width", "wraplength"]
         self.methodToOptions = {}
 
-    def handle2WayOptions(self, element, remove=True):
+    def handle2ParamMethod(self, element, remove=True):
         for method in self.methodToOptions:
             if self.methodToOptions[method][0] in element.attrib and \
                     self.methodToOptions[method][1] in element.attrib:
@@ -168,7 +168,7 @@ class TkWindow(tk.Tk, TkBase):
         self.setOptions(element)
 
     def setOptions(self, element):
-        self.handle2WayOptions(element)
+        self.handle2ParamMethod(element)
 
         if "title" in element.attrib:
             self.title(element.attrib["title"])

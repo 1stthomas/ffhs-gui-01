@@ -87,8 +87,6 @@ class Builder:
             widgetClassName = self.getWidgetClassName(element.tag)
             class_ = getattr(ctsel, widgetClassName)
             self.__current = class_(parent, element)
-#        elif element.tag == "button":
-#            self.__current = ctsel.TkButton(parent, element)
         elif element.tag == "window":
             self.__current = ctsel.TkWindow(element)
             self.__root = self.__current
