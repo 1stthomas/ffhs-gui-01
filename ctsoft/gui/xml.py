@@ -44,7 +44,9 @@ class Interpreter:
         return xmlee.parse(self.__filename).getroot()
 
     def parseXml(self, element, parent):
-        self.__builder.create(element, parent)
+        if self.__builder.create(element, parent) is False:
+            return
+
         parent = self.__builder.getCurrent()
 
         if self.check4Id(element) is True:
@@ -54,6 +56,10 @@ class Interpreter:
 
         for el in elements:
             self.parseXml(el, parent)
+
+        if parent.getOrganizeTypeChildren() == "grid":
+            rows = element.findall("row")
+            parent.setRows(rows)
 
     def addElementById(self, elementXml, elementTk):
         self.__controller.addWidget(elementXml.attrib["id"], elementTk)
@@ -67,7 +73,7 @@ class Builder:
         self.__current = None
         self.__root = None
         self.__rootName = "gui"
-        self.__skippedWidgets = ["image", "pack"]
+        self.__skippedWidgets = ["grid", "image", "pack", "row"]
         self.__widgets = ["button", "canvas", "checkbutton", "entry",
                           "frame", "label", "labelframe", "listbox",
                           "menu", "optionmenu", "radiobutton", "scale",
@@ -82,7 +88,7 @@ class Builder:
 
     def create(self, element, parent):
         if element.tag in self.__skippedWidgets:
-            return
+            return False
         elif element.tag in self.__widgets:
             widgetClassName = self.getWidgetClassName(element.tag)
             class_ = getattr(ctsel, widgetClassName)

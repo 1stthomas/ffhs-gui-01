@@ -17,6 +17,14 @@ class TkBase(object):
                            "width", "wraplength"]
         self.methodTo2Options = {}
         self.methodTo1Option = {}
+        self.setOrganizeType("pack")
+        self.setOrganizeTypeChildren("pack")
+
+    def getOrganizeType(self):
+        return self.__organizeType
+
+    def getOrganizeTypeChildren(self):
+        return self.__organizeTypeChildren
 
     def handle1ParamMethods(self, element, remove=True):
         for method in self.methodTo1Option:
@@ -46,6 +54,12 @@ class TkBase(object):
                 if remove:
                     del element.attrib[self.methodTo2Options[method][1]]
 
+    def setRows(self, rows):
+        for row in rows:
+            num = row.attrib["num"]
+            del row.attrib["num"]
+            self.grid_rowconfigure(num, row)
+
     def setOptions(self, options):
         for key in options:
             if key == "id":
@@ -55,18 +69,18 @@ class TkBase(object):
             else:
                 self[key] = options[key]
 
+    def setOrganizeType(self, organizeType):
+        self.__organizeType = organizeType
+
+    def setOrganizeTypeChildren(self, organizeTypeChildren):
+        self.__organizeTypeChildren = organizeTypeChildren
+
 
 class TkWidget(TkBase):
     def __init__(self, master, element):
         super(TkWidget, self).__init__()
+        self.__parent = None
         self.setParent(master)
-
-    def doPack(self, element):
-        pack = element.findall("pack")
-        if pack is not None:
-            self.pack(pack[0].attrib)
-        else:
-            self.pack()
 
     def getParent(self):
         return self.__parent
@@ -74,16 +88,30 @@ class TkWidget(TkBase):
     def getSelf(self):
         return self
 
+    def organize(self, element):
+        pack = element.findall("pack")
+        grid = element.findall("grid")
+        if pack:
+            self.pack(pack[0].attrib)
+        elif grid:
+            self.grid(grid[0].attrib)
+            parent = self.getParent()
+            parentAttr = grid[0].findall("column")[0]
+            num = parentAttr.attrib["num"]
+            del parentAttr.attrib["num"]
+            parent.grid_columnconfigure(num, parentAttr.attrib)
+            self.setOrganizeType("grid")
+            parent.setOrganizeTypeChildren("grid")
+
     def setParent(self, parent):
         self.__parent = parent
 
 
 class TkWidgetSimple(TkWidget):
     def __init__(self, master, element):
-        super(TkWidget, self).__init__()
+        super(TkWidgetSimple, self).__init__(master, element)
         self.setOptions(element.attrib)
-        self.doPack(element)
-        
+        self.organize(element)
 
 
 class TkButton(tk.Button, TkWidgetSimple):

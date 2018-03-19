@@ -2,10 +2,13 @@
 <gui>
     <window title="testest 123.." minsize-x="500" minsize-y="300" bg="#666">
         <frame bd="3" bg="#EEEEEE" relief="sunken">
-            <pack expand="true" fill="none" ipadx="80" />
+            <pack expand="true" fill="x" ipadx="80" />
+            <row num="0" weight="1" />
             <frame bd="20" bg="#0000FF" relief="sunken">
-                <pack expand="true" fill="none" ipadx="80" />
-                <frame bg="#FF00FF" height="100" width="200">
+                <grid row="0" column="0" sticky="nswe">
+                    <column num="0" weight="1" uniform="group1" />
+                </grid>
+                <frame bg="#FF00FF" height="100">
                     <pack expand="true" fill="x" ipadx="5" ipady="10" />
                     <label text="Anzahl Schritte: ">
                         <pack side="left" />
@@ -20,6 +23,14 @@
                         <pack side="right" />
                     </button>
                 </frame>
+            </frame>
+            <frame bg="#009966" relief="sunken">
+                <grid row="0" column="1" sticky="nswe">
+                    <column num="1" weight="1" uniform="group1" />
+                </grid>
+                <label text="rechtes frame..">
+                    <pack side="left" />
+                </label>
             </frame>
         </frame>
     </window>
