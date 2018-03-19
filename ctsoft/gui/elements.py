@@ -15,28 +15,36 @@ class TkBase(object):
                            "maxsize-y", "minsize-x", "minsize-y", "padx",
                            "pady", "xscrollincrement", "yscrollincrement",
                            "width", "wraplength"]
-        self.methodToOptions = {}
+        self.methodTo2Options = {}
+        self.methodTo1Option = {}
 
-    def handle2ParamMethod(self, element, remove=True):
-        for method in self.methodToOptions:
-            if self.methodToOptions[method][0] in element.attrib and \
-                    self.methodToOptions[method][1] in element.attrib:
+    def handle1ParamMethods(self, element, remove=True):
+        for method in self.methodTo1Option:
+            method_ = getattr(self, method)
+            method_(element.attrib[method])
+            if remove:
+                del element.attrib[method]
+
+    def handle2ParamMethods(self, element, remove=True):
+        for method in self.methodTo2Options:
+            if self.methodTo2Options[method][0] in element.attrib and \
+                    self.methodTo2Options[method][1] in element.attrib:
                 method_ = getattr(self, method)
-                method_(element.attrib[self.methodToOptions[method][0]],
-                        element.attrib[self.methodToOptions[method][1]])
+                method_(element.attrib[self.methodTo2Options[method][0]],
+                        element.attrib[self.methodTo2Options[method][1]])
                 if remove:
-                    del element.attrib[self.methodToOptions[method][0]]
-                    del element.attrib[self.methodToOptions[method][1]]
-            elif self.methodToOptions[method][0] in element.attrib:
+                    del element.attrib[self.methodTo2Options[method][0]]
+                    del element.attrib[self.methodTo2Options[method][1]]
+            elif self.methodTo2Options[method][0] in element.attrib:
                 method_ = getattr(self, method)
-                method_(element.attrib[self.methodToOptions[method][0]])
+                method_(element.attrib[self.methodTo2Options[method][0]])
                 if remove:
-                    del element.attrib[self.methodToOptions[method][0]]
-            elif self.methodToOptions[method][1] in element.attrib:
+                    del element.attrib[self.methodTo2Options[method][0]]
+            elif self.methodTo2Options[method][1] in element.attrib:
                 method_ = getattr(self, method)
-                method_(element.attrib[self.methodToOptions[method][1]])
+                method_(element.attrib[self.methodTo2Options[method][1]])
                 if remove:
-                    del element.attrib[self.methodToOptions[method][1]]
+                    del element.attrib[self.methodTo2Options[method][1]]
 
     def setOptions(self, options):
         for key in options:
@@ -161,17 +169,15 @@ class TkWindow(tk.Tk, TkBase):
     def __init__(self, element, *args, **kw):
         tk.Tk.__init__(self)
         TkBase.__init__(self)
-        self.methodToOptions = {"maxsize": ("maxsize-x", "maxsize-y"),
-                                "minsize": ("minsize-x", "minsize-y"),
-                                "resizeable": ("resizeable-x",
-                                               "resizeable-y")}
+        self.methodTo1Option = {"title": "title"}
+        self.methodTo2Options = {"maxsize": ("maxsize-x", "maxsize-y"),
+                                 "minsize": ("minsize-x", "minsize-y"),
+                                 "resizeable": ("resizeable-x",
+                                                "resizeable-y")}
         self.setOptions(element)
 
     def setOptions(self, element):
-        self.handle2ParamMethod(element)
-
-        if "title" in element.attrib:
-            self.title(element.attrib["title"])
-            del element.attrib["title"]
+        self.handle1ParamMethods(element)
+        self.handle2ParamMethods(element)
 
         TkBase.setOptions(self, element.attrib)
