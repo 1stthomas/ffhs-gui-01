@@ -10,7 +10,7 @@ import xml.etree.ElementTree as xmlee
 import ctsoft.gui.elements as ctsel
 
 
-class Interpreter:
+class Parser:
     def __init__(self, controller, filename, encoding="UTF-8", method="xml"):
         self.__controller = controller
         self.__encoding = encoding

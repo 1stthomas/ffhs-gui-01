@@ -11,7 +11,7 @@ import ctsoft.gui.xml as ctsxml
 class Controller(object):
     def __init__(self):
         self.__identifier = "id"
-        self.__interpreter = ctsxml.Interpreter(self, "settings.gui.xml")
+        self.__parser = ctsxml.Parser(self, "settings.gui.xml")
         self.__top = {}
         self.__widgets = {}
 
@@ -19,8 +19,8 @@ class Controller(object):
         self.__widgets[key] = value
 
     def createGui(self):
-        self.__interpreter.setIdentifier(self.__identifier)
-        self.__top = self.__interpreter.createElements()
+        self.__parser.setIdentifier(self.__identifier)
+        self.__top = self.__parser.createElements()
 
     def getWidget(self, key):
         return self.__widgets[key]
