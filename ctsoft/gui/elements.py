@@ -106,7 +106,7 @@ class TkBase(object):
         for row in rows:
             num = row.attrib["num"]
             del row.attrib["num"]
-            self.grid_rowconfigure(num, row)
+            self.rowconfigure(num, row.attrib)
 
 
 class TkWidget(TkBase):
@@ -141,7 +141,7 @@ class TkWidget(TkBase):
             parentAttr = grid[0].findall("column")[0]
             num = parentAttr.attrib["num"]
             del parentAttr.attrib["num"]
-            parent.grid_columnconfigure(num, parentAttr.attrib)
+            parent.columnconfigure(num, parentAttr.attrib)
             self.setOrganizeType("grid")
             parent.setOrganizeTypeChildren("grid")
 
