@@ -93,6 +93,10 @@ class Builder:
             widgetClassName = self.getWidgetClassName(element.tag)
             class_ = getattr(ctsel, widgetClassName)
             self.__current = class_(parent, element)
+            images = element.findall("image")
+            if images:
+                for image in images:
+                    self.__current.setImage(image)
         elif element.tag == "window":
             self.__current = ctsel.TkWindow(element)
             self.__root = self.__current

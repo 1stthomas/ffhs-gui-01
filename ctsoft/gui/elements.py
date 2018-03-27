@@ -5,6 +5,8 @@ Created on Mon Mar  5 18:03:52 2018
 @author: ctsoft
 """
 
+import os
+from PIL import Image, ImageTk
 import tkinter as tk
 
 
@@ -17,14 +19,42 @@ class TkBase(object):
                            "width", "wraplength"]
         self.methodTo2Options = {}
         self.methodTo1Option = {}
+        self.__photoImage = {}
         self.setOrganizeType("pack")
         self.setOrganizeTypeChildren("pack")
+
+    def createPhotoImage(self, path, dimension={}):
+        pathSanitized = path
+        if path[0] == "/":
+            # it is a relative path
+            pathSanitized = os.getcwd() + path
+        img = Image.open(pathSanitized)
+        width = int(dimension.get("width", 0))
+        height = int(dimension.get("height", 0))
+
+        if width > 0 or height > 0:
+            # image resizing needed
+            if width > 0 and height > 0:
+                img = img.resize((width, height), Image.ANTIALIAS)
+            elif width > 0:
+                height = int(round(img.height * width / img.width))
+                img = img.resize((width, height), Image.ANTIALIAS)
+                # Todo: calculate the relative height
+#                pass
+            elif height > 0:
+                width = int(round(img.width * height / img.height))
+                img = img.resize((width, height), Image.ANTIALIAS)
+        photoImage = ImageTk.PhotoImage(img)
+        self.setPhotoImage(photoImage)
 
     def getOrganizeType(self):
         return self.__organizeType
 
     def getOrganizeTypeChildren(self):
         return self.__organizeTypeChildren
+
+    def getPhotoImage(self):
+        return self.__photoImage
 
     def handle1ParamMethods(self, element, remove=True):
         for method in self.methodTo1Option:
@@ -54,12 +84,6 @@ class TkBase(object):
                 if remove:
                     del element.attrib[self.methodTo2Options[method][1]]
 
-    def setRows(self, rows):
-        for row in rows:
-            num = row.attrib["num"]
-            del row.attrib["num"]
-            self.grid_rowconfigure(num, row)
-
     def setOptions(self, options):
         for key in options:
             if key == "id":
@@ -75,12 +99,30 @@ class TkBase(object):
     def setOrganizeTypeChildren(self, organizeTypeChildren):
         self.__organizeTypeChildren = organizeTypeChildren
 
+    def setPhotoImage(self, photoImage):
+        self.__photoImage = photoImage
+
+    def setRows(self, rows):
+        for row in rows:
+            num = row.attrib["num"]
+            del row.attrib["num"]
+            self.grid_rowconfigure(num, row)
+
 
 class TkWidget(TkBase):
     def __init__(self, master, element):
         super(TkWidget, self).__init__()
         self.__parent = None
         self.setParent(master)
+
+    def createImage(self, xml):
+        dimension = {}
+        if "height" in xml:
+            dimension["height"] = xml["height"]
+        if "width" in xml:
+            dimension["width"] = xml["width"]
+
+        self.createPhotoImage(xml["path"], dimension)
 
     def getParent(self):
         return self.__parent
@@ -102,6 +144,10 @@ class TkWidget(TkBase):
             parent.grid_columnconfigure(num, parentAttr.attrib)
             self.setOrganizeType("grid")
             parent.setOrganizeTypeChildren("grid")
+
+    def setImage(self, xml):
+        self.createImage(xml.attrib)
+        self.image = self.getPhotoImage()
 
     def setParent(self, parent):
         self.__parent = parent
@@ -125,6 +171,14 @@ class TkCanvas(tk.Canvas, TkWidgetSimple):
     def __init__(self, master, *args, **kw):
         tk.Canvas.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
+
+    def setImage(self, xml):
+        self.createImage(xml.attrib)
+        img = self.getPhotoImage()
+        xVal = int(xml.attrib.get("x", "0"))
+        yVal = int(xml.attrib.get("y", "0"))
+        anchor = xml.attrib.get("anchor", "nw")
+        self.create_image(xVal, yVal, image=img, anchor=anchor)
 
 
 class TkCheckbutton(tk.Checkbutton, TkWidgetSimple):
