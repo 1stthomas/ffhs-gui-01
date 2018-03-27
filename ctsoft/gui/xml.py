@@ -57,9 +57,7 @@ class Parser:
         for el in elements:
             self.parseXml(el, parent)
 
-        if parent.getOrganizeTypeChildren() == "grid":
-            rows = element.findall("row")
-            parent.setRows(rows)
+        self.__builder.close(parent, element)
 
     def addElementById(self, elementXml, elementTk):
         self.__controller.addWidget(elementXml.attrib["id"], elementTk)
@@ -85,6 +83,12 @@ class Builder:
             return True
         else:
             return False
+
+    def close(self, current, xml):
+        self.setCurrent(current)
+        if current.getOrganizeTypeChildren() == "grid":
+            rows = xml.findall("row")
+            current.setRows(rows)
 
     def create(self, element, parent):
         if element.tag in self.__skippedWidgets:
@@ -124,3 +128,6 @@ class Builder:
 
     def getWindowName(self):
         return self.__windowName
+
+    def setCurrent(self, current):
+        self.__current = current
