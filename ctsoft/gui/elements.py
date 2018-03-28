@@ -20,6 +20,7 @@ class TkBase(object):
                            "width", "wraplength"]
         self.methodTo2Options = {}
         self.methodTo1Option = {}
+        self.__font = False
         self.__photoImage = {}
         self.setOrganizeType("pack")
         self.setOrganizeTypeChildren("pack")
@@ -45,6 +46,9 @@ class TkBase(object):
                 img = img.resize((width, height), Image.ANTIALIAS)
         photoImage = ImageTk.PhotoImage(img)
         self.setPhotoImage(photoImage)
+
+    def getFont(self):
+        return self.__font
 
     def getOrganizeType(self):
         return self.__organizeType
@@ -83,6 +87,9 @@ class TkBase(object):
                 if remove:
                     del element.attrib[self.methodTo2Options[method][1]]
 
+    def setFont(self, font):
+        self.__font = font
+
     def setOptions(self, options):
         for key in options:
             if key == "id":
@@ -93,8 +100,8 @@ class TkBase(object):
                 for opt in opts:
                     arr = opt.split(": ")
                     d[arr[0]] = arr[1]
-                font = tkFont(**d)
-                self.configure(font=font)
+                self.__font = tkFont(**d)
+                self.configure(font=self.__font)
             elif key in self.__numerics:
                 self[key] = int(options[key])
             else:
