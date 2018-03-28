@@ -8,6 +8,7 @@ Created on Mon Mar  5 18:03:52 2018
 import os
 from PIL import Image, ImageTk
 import tkinter as tk
+from tkinter.font import Font as tkFont
 
 
 class TkBase(object):
@@ -39,8 +40,6 @@ class TkBase(object):
             elif width > 0:
                 height = int(round(img.height * width / img.width))
                 img = img.resize((width, height), Image.ANTIALIAS)
-                # Todo: calculate the relative height
-#                pass
             elif height > 0:
                 width = int(round(img.width * height / img.height))
                 img = img.resize((width, height), Image.ANTIALIAS)
@@ -88,6 +87,14 @@ class TkBase(object):
         for key in options:
             if key == "id":
                 continue
+            elif key == "font":
+                opts = options[key].replace("'", "").split(", ")
+                d = {}
+                for opt in opts:
+                    arr = opt.split(": ")
+                    d[arr[0]] = arr[1]
+                font = tkFont(**d)
+                self.configure(font=font)
             elif key in self.__numerics:
                 self[key] = int(options[key])
             else:
