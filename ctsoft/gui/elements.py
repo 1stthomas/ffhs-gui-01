@@ -170,8 +170,9 @@ class TkWidget(TkBase):
 class TkWidgetSimple(TkWidget):
     def __init__(self, master, element):
         super(TkWidgetSimple, self).__init__(master, element)
-        self.setOptions(element.attrib)
-        self.organize(element)
+        if element:
+            self.setOptions(element.attrib)
+            self.organize(element)
 
 
 class TkButton(tk.Button, TkWidgetSimple):
@@ -277,3 +278,53 @@ class TkWindow(tk.Tk, TkBase):
         self.handle2ParamMethods(element)
 
         TkBase.setOptions(self, element.attrib)
+
+
+class RadiobuttonGroup(object):
+    def __init__(self, master, element, *args, **kw):
+        self.__radios = []
+        self.__variable = None
+        self.createRadiobuttons(master, element)
+
+    def createRadiobuttons(self, master, element):
+        print(master)
+        radios = element.findall("radiobutton")
+        if "variable-type" in element.attrib and \
+                element.attrib["variable-type"] == "string":
+            self.__variable = tk.StringVar()
+        else:
+            self.__variable = tk.IntVar()
+
+        if "default-value" in element.attrib:
+            print("habe default: ", element.attrib["default-value"])
+            self.__variable.set(element.attrib["default-value"])
+
+        layoutType = "default"
+        if "layout-type" in element.attrib:
+            layoutType = element.attrib["layout-type"]
+
+        for radio in radios:
+            self.createRadiobutton(master, radio, layoutType)
+
+    def createRadiobutton(self, master, element, layoutType):
+        if layoutType == "frame":
+            frameOptions = {"bg": "#FFFFFF", "padx": "5"}
+            frame = tk.Frame(master, frameOptions)
+            framePack = {"expand": "True", "fill": "x", "side": "top"}
+            frame.pack(framePack)
+
+            radio = TkRadiobutton(frame, element)
+        else:
+            radio = TkRadiobutton(master, element)
+        radio.configure(variable=self.__variable)
+#        radio.configure(command=self.printSelection,
+#                        variable=self.__variable)
+        packOptions = {}
+        pack = element.findall("pack")
+        if pack:
+            for option in pack[0].attrib:
+                packOptions[option] = pack[0].attrib[option]
+        else:
+            packOptions = {"expand": "True", "fill": "x", "side": "left"}
+        radio.pack(packOptions)
+        self.__radios.append(radio)
