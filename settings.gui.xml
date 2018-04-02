@@ -1,36 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui>
-    <window title="testest 123.." minsize-x="500" minsize-y="300" bg="#666">
-        <frame bd="3" bg="#EEEEEE" relief="sunken">
-            <pack expand="true" fill="x" ipadx="80" />
+    <window bg="#EFEFEF" minsize-x="500" minsize-y="300" title="FFHS - AWD - PVA 2">
+        <row num="0" weight="1" />
+        <frame bg="#EFEFEF">
+            <grid row="0" column="0" sticky="nesw">
+                <column num="0" weight="1" uniform="group1" />
+            </grid>
             <row num="0" weight="1" />
-            <frame bd="20" bg="#0000FF" relief="sunken">
-                <grid row="0" column="0" sticky="nswe">
+            <frame bd="2" bg="#EFEFEF" padx="10" pady="10" relief="sunken">
+                <grid row="0" column="0" sticky="nesw">
                     <column num="0" weight="1" uniform="group1" />
                 </grid>
-                <frame bg="#FF00FF" height="100">
-                    <pack expand="true" fill="x" ipadx="5" ipady="10" />
-                    <label text="Anzahl Schritte: ">
-                        <pack side="left" />
+                <row num="0" weight="1" />
+                <frame bd="1" bg="#EFEFEF" relief="sunken">
+                    <grid row="0" column="0" sticky="new">
+                        <column num="0" weight="1" uniform="group1" />
+                    </grid>
+                    <row num="0" weight="1" />
+                    <row num="1" weight="1" />
+                    <row num="2" weight="1" />
+                    <labelframe padx="5" pady="7" text="Input">
+                        <grid row="0" column="0" sticky="nwe">
+                            <column num="0" weight="1" />
+                        </grid>
+                        <frame>
+                            <pack expand="true" fill="x" side="top" />
+                            <label anchor="w" text="From File:">
+                                <pack expand="true" fill="x" side="top" />
+                            </label>
+                            <button text="Load File">
+                                <pack expand="true" fill="x" side="top" />
+                            </button>
+                        </frame>
+                        <frame>
+                            <pack expand="true" fill="x" side="top" />
+                            <label anchor="w" text="From Input:">
+                                <pack expand="true" fill="x" side="top" />
+                            </label>
+                            <entry text="testtest..">
+                                <pack expand="true" fill="x" side="top" />
+                            </entry>
+                        </frame>
+                    </labelframe>
+                    <label font="size: 2, weight: 'bold'" pady="0">
+                        <grid row="1" column="0" sticky="nwe">
+                            <column num="0" weight="1" />
+                        </grid>
                     </label>
-                    <entry bd="5" width="35">
-                        <pack side="right" />
-                    </entry>
-                </frame>
-                <frame bg="#FFFFFF">
-                    <pack expand="true" fill="x" ipadx="5" ipady="10" side="right" />
-                    <button command="sdf" text="Ausführen">
-                        <pack side="right" />
-                    </button>
+                    <labelframe padx="5" pady="7" text="Output">
+                        <grid row="2" column="0" sticky="nwe">
+                            <column num="0" weight="1" />
+                        </grid>
+                        <frame bg="green">
+                            <pack expand="true" fill="x" side="top" />
+                            <label bg="red" text="Please choose the Charttype:">
+                                <pack side="left" />
+                            </label>
+                        </frame>
+                        <radiobuttongroup default-value="function-single" id="chart-type" layout-type="frame" variable-type="string">
+                            <radiobutton anchor="w" text="Single Function Plot" value="function-single">
+                                <pack expand="true" fill="x" side="left" />
+                            </radiobutton>
+                            <radiobutton anchor="w" text="Multiple Function Plot" value="function-multiple">
+                                <pack expand="true" fill="x" side="left" />
+                            </radiobutton>
+                            <radiobutton anchor="w" text="Bar Chart" value="bar-chart">
+                                <pack expand="true" fill="x" side="left" />
+                            </radiobutton>
+                            <radiobutton anchor="w" text="Pie Chart" value="pie-chart">
+                                <pack expand="true" fill="x" side="left" />
+                            </radiobutton>
+                            <radiobutton anchor="w" text="Histogram" value="histogram">
+                                <pack expand="true" fill="x" side="left" />
+                            </radiobutton>
+                        </radiobuttongroup>
+                    </labelframe>
                 </frame>
             </frame>
-            <frame bg="#009966" relief="sunken">
-                <grid row="0" column="1" sticky="nswe">
+            <frame bg="#EFEFEF" relief="sunken">
+                <grid row="0" column="1" sticky="nesw">
                     <column num="1" weight="1" uniform="group1" />
                 </grid>
-                <label text="rechtes frame..">
-                    <pack side="left" />
-                </label>
+                <row num="0" weight="1" />
+                <row num="1" weight="1" />
+                <frame bd="2" relief="sunken">
+                    <grid row="0" column="1" sticky="nesw">
+                        <column num="1" weight="1" uniform="group2" />
+                    </grid>
+                </frame>
+                <frame bd="2" bg="#5500FF" relief="sunken">
+                    <grid row="1" column="1" sticky="nesw">
+                        <column num="1" weight="1" uniform="group2" />
+                    </grid>
+                </frame>
             </frame>
         </frame>
     </window>
