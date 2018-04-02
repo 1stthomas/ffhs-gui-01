@@ -316,9 +316,8 @@ class RadiobuttonGroup(object):
             radio = TkRadiobutton(frame, element)
         else:
             radio = TkRadiobutton(master, element)
-        radio.configure(variable=self.__variable)
-#        radio.configure(command=self.printSelection,
-#                        variable=self.__variable)
+        radio.configure(command=self.doNothing,
+                        variable=self.__variable)
         packOptions = {}
         pack = element.findall("pack")
         if pack:
@@ -328,3 +327,6 @@ class RadiobuttonGroup(object):
             packOptions = {"expand": "True", "fill": "x", "side": "left"}
         radio.pack(packOptions)
         self.__radios.append(radio)
+
+    def doNothing(self):
+        pass
