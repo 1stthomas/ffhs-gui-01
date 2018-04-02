@@ -8,5 +8,6 @@ Created on Sun Mar  4 14:45:53 2018
 import ctsoft.app_pva_3 as app
 
 
-app = app.App()
-app.run()
+if __name__ == "__main__":
+    app = app.App()
+    app.run()
