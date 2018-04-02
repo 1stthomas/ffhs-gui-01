@@ -100,7 +100,11 @@ class Builder:
             images = element.findall("image")
             if images:
                 for image in images:
+                    # only the last one will be displayed
                     self.__current.setImage(image)
+        elif element.tag == "radiobuttongroup":
+            self.__current = ctsel.RadiobuttonGroup(parent, element)
+            return False
         elif element.tag == "window":
             self.__current = ctsel.TkWindow(element)
             self.__root = self.__current
@@ -118,12 +122,12 @@ class Builder:
 
     def getWidgetClassName(self, tagName):
         if tagName == "labelframe":
-            tagNameNew = "labelFrame"
+            className = "TkLabelFrame"
         elif tagName == "optionmenu":
-            tagNameNew = "optionMenu"
+            className = "TkOptionMenu"
         else:
-            tagNameNew = tagName
-        className = "Tk" + tagNameNew.capitalize()
+            className = "Tk" + tagName.capitalize()
+
         return className
 
     def getWindowName(self):
