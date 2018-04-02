@@ -12,13 +12,15 @@
                     <column num="0" weight="1" uniform="group1" />
                 </grid>
                 <row num="0" weight="1" />
-                <frame bd="1" bg="#EFEFEF" relief="sunken">
+                <frame bg="#EFEFEF" relief="sunken">
                     <grid row="0" column="0" sticky="new">
                         <column num="0" weight="1" uniform="group1" />
                     </grid>
                     <row num="0" weight="1" />
                     <row num="1" weight="1" />
                     <row num="2" weight="1" />
+                    <row num="3" weight="1" />
+                    <row num="4" weight="1" />
                     <labelframe padx="5" pady="7" text="Input">
                         <grid row="0" column="0" sticky="nwe">
                             <column num="0" weight="1" />
@@ -28,7 +30,10 @@
                             <label anchor="w" text="From File:">
                                 <pack expand="true" fill="x" side="top" />
                             </label>
-                            <button text="Load File">
+                            <label anchor="w" id="file-path">
+                                <pack expand="true" fill="x" side="top" />
+                            </label>
+                            <button id="file-dialog" text="Load File">
                                 <pack expand="true" fill="x" side="top" />
                             </button>
                         </frame>
@@ -51,9 +56,9 @@
                         <grid row="2" column="0" sticky="nwe">
                             <column num="0" weight="1" />
                         </grid>
-                        <frame bg="green">
+                        <frame>
                             <pack expand="true" fill="x" side="top" />
-                            <label bg="red" text="Please choose the Charttype:">
+                            <label text="Please choose the Charttype:">
                                 <pack side="left" />
                             </label>
                         </frame>
@@ -75,6 +80,22 @@
                             </radiobutton>
                         </radiobuttongroup>
                     </labelframe>
+                    <label font="size: 2, weight: 'bold'" pady="0">
+                        <grid row="3" column="0" sticky="nwe">
+                            <column num="0" weight="1" />
+                        </grid>
+                    </label>
+                    <frame>
+                        <grid row="4" column="0" sticky="nwe">
+                            <column num="0" weight="1" />
+                        </grid>
+                        <button id="button-reset" text="Reset">
+                            <pack side="left"/>
+                        </button>
+                        <button id="button-submit" text="Submit">
+                            <pack side="right"/>
+                        </button>
+                    </frame>
                 </frame>
             </frame>
             <frame bg="#EFEFEF" relief="sunken">
@@ -88,10 +109,13 @@
                         <column num="1" weight="1" uniform="group2" />
                     </grid>
                 </frame>
-                <frame bd="2" bg="#5500FF" relief="sunken">
+                <frame bd="2" relief="sunken">
                     <grid row="1" column="1" sticky="nesw">
                         <column num="1" weight="1" uniform="group2" />
                     </grid>
+                    <label anchor="nw" id="gui-message">
+                        <pack expand="true" fill="both" side="top" />
+                    </label>
                 </frame>
             </frame>
         </frame>
