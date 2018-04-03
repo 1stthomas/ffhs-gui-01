@@ -7,10 +7,12 @@ Created on Tue Mar 27 18:07:09 2018
 
 
 class Input(object):
-    def __init__(self, plotType, data):
+    def __init__(self, plotType="", data=[]):
         self.__data = []
         self.__plotType = ""
-        self.__plotTypes = {"bar", "func", "func_multi", "histo", "pie"}
+        self.__plotTypes = {"bar-chart", "function-single",
+                            "function-multiple", "histogram", "pie-chart"}
+        self.setData(data)
         self.setPlotType(plotType)
 
     def getData(self):
@@ -31,18 +33,33 @@ class Input(object):
 
 
 class Output(object):
-    def __init__(self, path, message):
-        self.__message = message
+    def __init__(self, path, messages=[], errors=[]):
+        self.__errors = []
+        self.__messages = []
         self.__path = path
+        self.setMessages(messages)
+        self.setErrors(errors)
 
-    def getMessage(self):
-        return self.__message
+    def addError(self, error):
+        self.__errors.append(error)
+
+    def addMessage(self, message):
+        self.__messages.append(message)
+
+    def getErrors(self):
+        return self.__errors
+
+    def getMessages(self):
+        return self.__messages
 
     def getPath(self):
         return self.__path
 
-    def setMessage(self, message):
-        self.__message = message
+    def setErrors(self, errors):
+        self.__errors = errors
+
+    def setMessages(self, messages):
+        self.__messages = messages
 
     def setPath(self, path):
         self.__path = path

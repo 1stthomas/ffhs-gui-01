@@ -9,6 +9,7 @@ import os
 from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter.font import Font as tkFont
+#from tkinter.filedialog import askopenfilename
 
 
 class TkBase(object):
@@ -20,6 +21,7 @@ class TkBase(object):
                            "width", "wraplength"]
         self.methodTo2Options = {}
         self.methodTo1Option = {}
+        self.__id = ""
         self.__font = False
         self.__photoImage = {}
         self.setOrganizeType("pack")
@@ -93,7 +95,7 @@ class TkBase(object):
     def setOptions(self, options):
         for key in options:
             if key == "id":
-                continue
+                self.__id = options[key]
             elif key == "font":
                 opts = options[key].replace("'", "").split(", ")
                 d = {}
@@ -287,7 +289,6 @@ class RadiobuttonGroup(object):
         self.createRadiobuttons(master, element)
 
     def createRadiobuttons(self, master, element):
-        print(master)
         radios = element.findall("radiobutton")
         if "variable-type" in element.attrib and \
                 element.attrib["variable-type"] == "string":
@@ -296,7 +297,6 @@ class RadiobuttonGroup(object):
             self.__variable = tk.IntVar()
 
         if "default-value" in element.attrib:
-            print("habe default: ", element.attrib["default-value"])
             self.__variable.set(element.attrib["default-value"])
 
         layoutType = "default"
@@ -308,8 +308,9 @@ class RadiobuttonGroup(object):
 
     def createRadiobutton(self, master, element, layoutType):
         if layoutType == "frame":
-            frameOptions = {"bg": "#FFFFFF", "padx": "5"}
-            frame = tk.Frame(master, frameOptions)
+#            frameOptions = {"bg": "#FFFFFF", "padx": "5"}
+            frame = tk.Frame(master)
+#            frame = tk.Frame(master, frameOptions)
             framePack = {"expand": "True", "fill": "x", "side": "top"}
             frame.pack(framePack)
 
@@ -329,4 +330,8 @@ class RadiobuttonGroup(object):
         self.__radios.append(radio)
 
     def doNothing(self):
+        # Without setting a command for the radio, the radios behave crazy
         pass
+
+    def getValue(self):
+        return self.__variable.get()

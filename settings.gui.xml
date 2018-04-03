@@ -42,7 +42,7 @@
                             <label anchor="w" text="From Input:">
                                 <pack expand="true" fill="x" side="top" />
                             </label>
-                            <entry text="testtest..">
+                            <entry id="input-widget" text="testtest..">
                                 <pack expand="true" fill="x" side="top" />
                             </entry>
                         </frame>
@@ -104,7 +104,7 @@
                 </grid>
                 <row num="0" weight="1" />
                 <row num="1" weight="1" />
-                <frame bd="2" relief="sunken">
+                <frame bd="2" id="container-canvas" relief="sunken">
                     <grid row="0" column="1" sticky="nesw">
                         <column num="1" weight="1" uniform="group2" />
                     </grid>
