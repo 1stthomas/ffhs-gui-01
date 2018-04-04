@@ -21,6 +21,9 @@ class Parser:
 
         self.__content = self.getFileContent(self.__filename)
 
+    def addElementById(self, elementXml, elementTk):
+        self.__controller.addWidget(elementXml.attrib["id"], elementTk)
+
     def check4Id(self, element):
         if self.__identifier in element.attrib:
             return True
@@ -44,13 +47,13 @@ class Parser:
         return xmlee.parse(self.__filename).getroot()
 
     def parseXml(self, element, parent):
-        if self.__builder.create(element, parent) is False:
-            return
-
+        doRec = self.__builder.create(element, parent)
         parent = self.__builder.getCurrent()
-
         if self.check4Id(element) is True:
             self.addElementById(element, parent)
+
+        if doRec is False:
+            return
 
         elements = element.findall("*")
 
@@ -58,9 +61,6 @@ class Parser:
             self.parseXml(el, parent)
 
         self.__builder.close(parent, element)
-
-    def addElementById(self, elementXml, elementTk):
-        self.__controller.addWidget(elementXml.attrib["id"], elementTk)
 
     def setIdentifier(self, identifier):
         self.__identifier = identifier

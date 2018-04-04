@@ -17,8 +17,8 @@ class App(object):
                            "input-value": ""}
 
     def displayPlot(self, path):
-        container = self.getCanvasContainer()
-        self.__cntGui.createCanvasWithImage(container, path)
+        container = self.getPlotContainer()
+        self.__cntGui.changeImage(container, path)
 
     def displayMessage(self, msg):
         self.getMessageWidget()["text"] += msg + "\n"
@@ -62,6 +62,9 @@ class App(object):
     def getMessageWidget(self):
         return self.__cntGui.getWidget("gui-message")
 
+    def getPlotContainer(self):
+        return self.__cntGui.getWidget("container-plot")
+
     def getPlotType(self):
         return self.getPlotTypeWidget().getValue()
 
@@ -95,7 +98,7 @@ class App(object):
         else:
             print("habe korrektes Input Object zum weitergeben.")
             # hier muss das Input Object an den calculator übergeben werden..
-            outputObj = ctsguiutil.Output("/../fib_runtime_plot.png",
+            outputObj = ctsguiutil.Output("/fib_runtime_plot.png",
                                           ["Graph successful created"])
             self.handleOutput(outputObj)
 
@@ -116,7 +119,6 @@ class App(object):
         widget = self.__cntGui.getWidget("input-widget")
         widget.delete(0, len(widget.get()))
         widget.insert(0, iValue)
-#        widget.configure(text=iValue)
 
     def setupGui(self):
         fdButton = self.getFileNameButtonWidget()

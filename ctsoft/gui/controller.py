@@ -22,19 +22,18 @@ class Controller(object):
     def addWidget(self, key, value):
         self.__widgets[key] = value
 
-    def createCanvasWithImage(self, parent, path):
-        canXml = xmlee.Element('canvas')
+    def changeImage(self, parent, path, attributes={}):
         imgXml = xmlee.Element('image')
-        imgXml.attrib["height"] = 200
-        imgXml.attrib["width"] = 385
-        canvas = ctsel.TkCanvas(parent, canXml)
-        canvas["bg"] = "red"
-        canvas.pack(expand=True, fill="x")
-        print("-- breite: ", parent.winfo_width())
-        print("-- hoehe: ", parent.winfo_height())
-        print("breite: ", canvas.winfo_width())
-        print("hoehe: ", canvas.winfo_height())
-        print("imgxml: ", imgXml.attrib)
+        imgXml.attrib["path"] = path
+        if "height" in attributes:
+            imgXml.attrib["height"] = attributes["height"]
+        else:
+            imgXml.attrib["height"] = "360"
+        if "width" in attributes:
+            imgXml.attrib["width"] = attributes["width"]
+        else:
+            imgXml.attrib["width"] = "1080"
+        parent.setImage(imgXml)
 
     def createGui(self):
         self.__parser.setIdentifier(self.__identifier)
