@@ -104,6 +104,8 @@ class TkBase(object):
                     d[arr[0]] = arr[1]
                 self.__font = tkFont(**d)
                 self.configure(font=self.__font)
+            elif key == "textvariable":
+                self[key] = tk.StringVar(value=options[key])
             elif key in self.__numerics:
                 self[key] = int(options[key])
             else:
