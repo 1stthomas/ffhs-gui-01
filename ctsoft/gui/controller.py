@@ -32,7 +32,7 @@ class Controller(object):
         if "width" in attributes:
             imgXml.attrib["width"] = attributes["width"]
         else:
-            imgXml.attrib["width"] = "1080"
+            imgXml.attrib["width"] = "576"
         parent.setImage(imgXml)
 
     def createGui(self):

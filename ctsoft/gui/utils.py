@@ -33,7 +33,7 @@ class Input(object):
 
 
 class Output(object):
-    def __init__(self, path, messages=[], errors=[]):
+    def __init__(self, path="", messages=[], errors=[]):
         self.__errors = []
         self.__messages = []
         self.__path = path

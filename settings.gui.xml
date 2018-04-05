@@ -42,7 +42,7 @@
                             <label anchor="w" text="From Input:">
                                 <pack expand="true" fill="x" side="top" />
                             </label>
-                            <entry id="input-widget" textvariable="">
+                            <entry id="input-widget" textvariable="Not Implemented atm">
                                 <pack expand="true" fill="x" side="top" />
                             </entry>
                         </frame>
@@ -100,15 +100,15 @@
             </frame>
             <frame bg="#EFEFEF" relief="sunken">
                 <grid row="0" column="1" sticky="nesw">
-                    <column num="1" weight="3" uniform="group1" />
+                    <column num="1" weight="0" uniform="group1" />
                 </grid>
                 <row num="0" weight="1" />
                 <row num="1" weight="1" />
-                <frame bd="2" id="container-canvas" relief="sunken">
+                <frame bd="2" bg="#FFFFFF" id="container-canvas" relief="sunken">
                     <grid row="0" column="1" sticky="nesw">
                         <column num="1" weight="1" uniform="group2" />
                     </grid>
-                    <canvas height="360" id="container-plot" width="1080">
+                    <canvas height="360" id="container-plot" width="576">
                         <pack expand="true" fill="both" />
                     </canvas>
                 </frame>

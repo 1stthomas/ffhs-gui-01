@@ -8,13 +8,14 @@ Created on Mon Apr  2 16:23:22 2018
 import csv
 import ctsoft.gui.controller as ctsguicnt
 import ctsoft.gui.utils as ctsguiutil
+import ctsoft.math1.calculator as ctscalc
 
 
 class App(object):
     def __init__(self):
         self.__cntGui = ctsguicnt.Controller()
         self.__defaults = {"delimiter": ",", "filename": "No File Selected",
-                           "input-value": ""}
+                           "input-value": "Not Implemented atm"}
 
     def displayPlot(self, path):
         container = self.getPlotContainer()
@@ -34,8 +35,16 @@ class App(object):
         with open(path, newline="") as csvfile:
             reader = csv.reader(csvfile,
                                 delimiter=self.__defaults["delimiter"])
+            ind = 0
             for row in reader:
-                data.append(row)
+                val = row[0].split(";")
+                index = 0
+                for v in val:
+                    if ind == 0:
+                        data.append([])
+                    data[index].append(float(v))
+                    index += 1
+                ind += 1
         return data
 
     def getFileNameButtonWidget(self):
@@ -96,15 +105,14 @@ class App(object):
             for error in errors:
                 self.displayMessage(error)
         else:
-            print("habe korrektes Input Object zum weitergeben.")
-            # hier muss das Input Object an den calculator übergeben werden..
-            outputObj = ctsguiutil.Output("/fib_runtime_plot.png",
-                                          ["Graph successful created"])
+            calc = ctscalc.Calculator()
+            outputObj = calc.createPlot(inputObj)
             self.handleOutput(outputObj)
 
-    def resetForm(self):
+    def resetGui(self):
         self.setFileName(self.__defaults["filename"])
         self.setInputValue(self.__defaults["input-value"])
+        self.getPlotContainer().delete("all")
 
     def run(self):
         self.__cntGui.createGui()
@@ -130,7 +138,7 @@ class App(object):
         formSubmit = self.getSubmitButtonWidget()
         formSubmit.configure(command=self.handleSubmit)
         resetSubmit = self.getResetButtonWidget()
-        resetSubmit.configure(command=self.resetForm)
+        resetSubmit.configure(command=self.resetGui)
 
     def validateInput(self, inputObj):
         errors = []
