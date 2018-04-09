@@ -66,7 +66,7 @@ class TkBase(object):
 
     def __init__(self):
         """
-        Instanciates a TkWidget.
+        Instanciates a TkBase.
 
         Parameters
         ----------
@@ -780,7 +780,7 @@ class TkWindow(tk.Tk, TkBase):
                                                 "resizeable-y")}
         self.setOptions(element)
 
-    def setOptions(self, element):
+    def setOptions(self, xml):
         """
         Overrides TkBase.setOptions() by calling following method sequence:
             handle1ParamMethods
@@ -789,10 +789,10 @@ class TkWindow(tk.Tk, TkBase):
 
         @Todo: Should be the TkBase.setOptions()!!
         """
-        self.handle1ParamMethods(element)
-        self.handle2ParamMethods(element)
+        self.handle1ParamMethods(xml)
+        self.handle2ParamMethods(xml)
 
-        TkBase.setOptions(self, element.attrib)
+        TkBase.setOptions(self, xml.attrib)
 
 
 class RadiobuttonGroup(object):
@@ -833,7 +833,7 @@ class RadiobuttonGroup(object):
         self.__variable = None
         self.createRadiobuttons(master, element)
 
-    def createRadiobuttons(self, master, element):
+    def createRadiobuttons(self, master, xml):
         """
         Creates a Radiobutton Group.
         All radiobutton elements beneath the group xml element will be created.
@@ -845,24 +845,24 @@ class RadiobuttonGroup(object):
         element : xml.etree.ElementTree
             Definitions of the Ra TkRadiobutton widget.
         """
-        radios = element.findall("radiobutton")
-        if "variable-type" in element.attrib and \
-                element.attrib["variable-type"] == "string":
+        radios = xml.findall("radiobutton")
+        if "variable-type" in xml.attrib and \
+                xml.attrib["variable-type"] == "string":
             self.__variable = tk.StringVar()
         else:
             self.__variable = tk.IntVar()
 
-        if "default-value" in element.attrib:
-            self.__variable.set(element.attrib["default-value"])
+        if "default-value" in xml.attrib:
+            self.__variable.set(xml.attrib["default-value"])
 
         layoutType = "default"
-        if "layout-type" in element.attrib:
-            layoutType = element.attrib["layout-type"]
+        if "layout-type" in xml.attrib:
+            layoutType = xml.attrib["layout-type"]
 
         for radio in radios:
             self.createRadiobutton(master, radio, layoutType)
 
-    def createRadiobutton(self, master, element, layoutType):
+    def createRadiobutton(self, master, xml, layoutType):
         """
         Creates a Single Radiobutton Widget and apends it to the radio
         collection.
@@ -871,7 +871,7 @@ class RadiobuttonGroup(object):
         ----------
         master : object
             Parent Tkinter widget of this one.
-        element : xml.etree.ElementTree
+        xml : xml.etree.ElementTree
             Definitions of the current TkRadiobutton widget.
         layoutType : string
             For "frame" the TkRadiobutton will have a surrounding tk.Frame.
@@ -883,14 +883,14 @@ class RadiobuttonGroup(object):
             framePack = {"expand": "True", "fill": "x", "side": "top"}
             frame.pack(framePack)
 
-            radio = TkRadiobutton(frame, element)
+            radio = TkRadiobutton(frame, xml)
         else:
-            radio = TkRadiobutton(master, element)
+            radio = TkRadiobutton(master, xml)
 
         radio.configure(command=self.doNothing,
                         variable=self.__variable)
         packOptions = {}
-        pack = element.findall("pack")
+        pack = xml.findall("pack")
         if pack:
             for option in pack[0].attrib:
                 packOptions[option] = pack[0].attrib[option]
