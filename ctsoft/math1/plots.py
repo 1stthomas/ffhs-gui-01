@@ -2,7 +2,7 @@
 """
 Created on Wed Apr  4 19:46:00 2018
 
-@author: zoom4u
+@author: ctsoft
 """
 
 import matplotlib.pyplot as plt
