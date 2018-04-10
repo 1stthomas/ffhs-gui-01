@@ -16,25 +16,18 @@ class Controller(object):
     """
     The GUI Controller with basic Functionality.
     It is the start point of the GUI.
-
-    Properties
-    ----------
-    __identifier : string
-        The name of the XML element id attribute.
-    __parser : ctsoft.gui.xml.Parser
-        The XMl parser.
-    __top : object
-        The root Tkinter element.
-    __widgets : dict
-        A collection of the GUI elements with an id.
-
     """
 
     def __init__(self):
         """ Instanciates a Controller. """
+
+        """ string : The name of the XML element id attribute. """
         self.__identifier = "id"
+        """ ctsoft.gui.xml.Parser : The XMl parser. """
         self.__parser = ctsxml.Parser(self, "settings.gui.xml")
-        self.__top = {}
+        """ mixed : None or the root Tkinter element after GUI creation. """
+        self.__top = None
+        """ dict : A collection of GUI widgets with an id. """
         self.__widgets = {}
 
     def addWidget(self, key, value):

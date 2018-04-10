@@ -48,14 +48,6 @@ class TkBase(object):
 
     Properties
     ----------
-    __font : string
-        The font of the current instance.
-    __id : string
-        The id of the current instance.
-    __numerics : list
-        Properties which will be prototyped to int.
-    __photoImage : object
-        A PIL ImageTk.PhotoImage or None.
     methodTo1Option : dict
         Definitions, which attributes of the xml element will be called as
         a 1 parameter method.
@@ -76,15 +68,21 @@ class TkBase(object):
             The element definitions of the new TkBase.
         """
         super(TkBase, self).__init__()
+
+        """ string : The font of the current instance. """
         self.__font = False
+        """ string : The id of the current instance. """
         self.__id = ""
+        """ list : Properties which will be prototyped to int. """
         self.__numerics = ["bd", "height", "ipadx", "ipady", "maxsize-x",
                            "maxsize-y", "minsize-x", "minsize-y", "padx",
                            "pady", "xscrollincrement", "yscrollincrement",
                            "width", "wraplength"]
+        """ mixed : A PIL ImageTk.PhotoImage or None. """
         self.__photoImage = None
         self.methodTo1Option = {}
         self.methodTo2Options = {}
+
         self.setOrganizeType("pack")
         self.setOrganizeTypeChildren("pack")
 
@@ -321,11 +319,6 @@ class TkWidget(TkBase):
         Sets a PIL PhotoImage.
     setParent :
         Sets the parent of the current widget.
-
-    Properties
-    ----------
-    __parent : object
-        The parent element of the current widget.
     """
 
     def __init__(self, master, element):
@@ -340,6 +333,8 @@ class TkWidget(TkBase):
             The element definitions of the new TkWidget.
         """
         super(TkWidget, self).__init__()
+
+        """ object : The parent element of the current widget. """
         self.__parent = None
         self.setParent(master)
 
@@ -457,6 +452,7 @@ class TkWidgetSimple(TkWidget):
             The element definitions of the new TkWidgetSimple.
         """
         super(TkWidgetSimple, self).__init__(master, element)
+
         if element:
             self.setOptions(element.attrib)
             self.organize(element)
@@ -521,6 +517,7 @@ class TkCanvas(tk.Canvas, TkWidgetSimple):
                 - anchor : The horizontal and vertical alignment of the image.
         """
         self.createImage(xml.attrib)
+
         img = self.getPhotoImage()
         xVal = int(xml.attrib.get("x", "0"))
         yVal = int(xml.attrib.get("y", "0"))
@@ -829,8 +826,12 @@ class RadiobuttonGroup(object):
         element : xml.etree.ElementTree
             The element definitions of the new RadiobuttonGroup.
         """
+
+        """ list : Collection of tk.Radiobutton widgets. """
         self.__radios = []
+        """ mixed : The value container as tk.IntVar() or tk.StringVar. """
         self.__variable = None
+
         self.createRadiobuttons(master, element)
 
     def createRadiobuttons(self, master, xml):

@@ -10,8 +10,43 @@ import xml.etree.ElementTree as xmlee
 import ctsoft.gui.elements as ctsel
 
 
-class Parser:
+class Parser(object):
+    """
+    Parses the XML of the GUI and calls the Builder to create the GUI.
+
+    Methods
+    -------
+    addElementById :
+        Adds an Tkinter widget to the controllers collection with its id
+        as key.
+    check4Id :
+        Checks whetever the XML element contains an attribute which matches
+        the defined identifier.
+    createElements :
+        Creates the GUI elements.
+    getFileContent :
+        Returns the content of an XML file as an xml.etree.ElementTree.
+    parseXml :
+        Parses the XML elements and calls the builder with the found elements.
+    setIdentifier :
+        Sets the identifier definition.
+    """
     def __init__(self, controller, filename, encoding="UTF-8", method="xml"):
+        """
+        Instanciates a Parser by setting the instance variables and calling
+        getFileContent().
+
+        Parameters
+        ----------
+        controller : ctsoft.gui.Controller
+            The GUI controller.
+        filename : string
+            The name of the file with the XML definitions.
+        encoding : string
+            The encoding of the submitted XML file. @Todo: what reason??
+        method : string
+            @Todo: what is the reason for this parameter??
+        """
         self.__controller = controller
         self.__encoding = encoding
         self.__filename = filename
@@ -22,16 +57,45 @@ class Parser:
         self.__content = self.getFileContent(self.__filename)
 
     def addElementById(self, elementXml, elementTk):
+        """
+        Adds an Tkinter widget to the GUI controller collection
+
+        Parameters
+        ----------
+        elementXml : xml.etree.ElementTree
+            The XML element of the current Tkinter widget.
+        elementTk : object
+            The Tkinter widget to collect.
+        """
         self.__controller.addWidget(elementXml.attrib["id"], elementTk)
 
     def check4Id(self, element):
+        """
+        Checks if the submitted XML element contains an attribute
+        defined as the identifier.
+
+        Parameters
+        ----------
+        element : xml.etree.ElementTree
+            The Xml element to check.
+
+        Returns
+        -------
+        boolean : True if the identifier could be found.
+        """
         if self.__identifier in element.attrib:
             return True
         else:
             return False
 
     def createElements(self):
+        """
+        Starts the GUI creation.
 
+        Returns
+        -------
+        tk.Tk : The Tkinter Root Window.
+        """
         if self.__builder.checkRootTag(self.__content):
             elements = self.__content.findall("*")
 
@@ -44,9 +108,34 @@ class Parser:
             return None
 
     def getFileContent(self, filename):
+        """
+        Returns the parsed XML content of the submitted Filename.
+
+        Parameters
+        ----------
+        filename : string
+            The file name of the XML definitions of the GUI.
+
+        Returns
+        -------
+        xml.etree.ElementTree : The parsed XML document.
+        """
         return xmlee.parse(self.__filename).getroot()
 
     def parseXml(self, element, parent):
+        """
+        Parses the XML Element and creates the Tkinter widget according to
+        the found widget definitions.
+        This is a recursive method.
+
+        Parameters
+        ----------
+        element : xml.etree.ElementTree
+            The current XML element with its children.
+        parent : mixed
+            None if the element is the root window, or the parent widget of
+            the current one.
+        """
         doRec = self.__builder.create(element, parent)
         parent = self.__builder.getCurrent()
         if self.check4Id(element) is True:
@@ -63,10 +152,42 @@ class Parser:
         self.__builder.close(parent, element)
 
     def setIdentifier(self, identifier):
+        """
+        Sets the identifier.
+
+        Parameters
+        ----------
+        identifier : string
+            The identifier.
+        """
         self.__identifier = identifier
 
 
 class Builder:
+    """
+    Creates the GUI Components by translating the XML into the Tkinter Widgets.
+
+    Methods
+    -------
+    checkRootTag :
+        Checks the XML tag name against the rootName variable value.
+    close :
+        Used by widgets controlled by the grid to set row definitions.
+    create :
+        Creates a widget as found in the XML definitions.
+    getCurrent :
+        Returns the current widget.
+    getRoot :
+        Returns the root widget of the GUI.
+    getRootName :
+        Returns the tag name of the root element of the XML document.
+    getWidgetClassName :
+        Returns the class name according to the submitted tag name.
+    getWindowName :
+        Returns the tag name of the root widget.
+    setCurrent :
+        Sets the current widget.
+    """
     def __init__(self):
         self.__current = None
         self.__root = None
@@ -79,48 +200,117 @@ class Builder:
         self.__windowName = "window"
 
     def checkRootTag(self, element):
+        """
+        Checks whetever the XML tag name is equal to the rootName variable
+        value.
+
+        Parameters
+        ----------
+        element : xml.etree.ElementTree
+            The XML element to check.
+
+        Returns
+        -------
+        boolean : True if the XML tag name is equal to rootName.
+        """
         if element.tag == self.__rootName:
             return True
         else:
             return False
 
     def close(self, current, xml):
+        """
+        Sets the Row Definitions of Elements, which are organized by the
+        Grid Layout Manager.
+        This Method is used by Parsers parseXml() at the end of the widget
+        creation cycles.
+
+        Parameters
+        ----------
+        current : object
+            Extended Tkinter widgets like descendants of
+            ctsoft.gui.elements.TkBase .
+        xml : xml.etree.ElementTree
+            The XML definitions of the current widget.
+        """
         self.setCurrent(current)
         if current.getOrganizeTypeChildren() == "grid":
             rows = xml.findall("row")
             current.setRows(rows)
 
-    def create(self, element, parent):
-        if element.tag in self.__skippedWidgets:
+    def create(self, xml, parent):
+        """
+        Creates the widgets by calling their constructors. Defined tag names
+        will be skipped.
+
+        xml : xml.etree.ElementTree
+            The XML element of the widget to be created.
+        parent : xml.etree.ElementTree
+            The parent widget of the new one.
+        """
+        if xml.tag in self.__skippedWidgets:
             return False
-        elif element.tag in self.__widgets:
-            widgetClassName = self.getWidgetClassName(element.tag)
+        elif xml.tag in self.__widgets:
+            widgetClassName = self.getWidgetClassName(xml.tag)
             class_ = getattr(ctsel, widgetClassName)
-            self.__current = class_(parent, element)
-            images = element.findall("image")
+            self.__current = class_(parent, xml)
+            images = xml.findall("image")
             if images:
                 for image in images:
                     # only the last one will be displayed
                     self.__current.setImage(image)
-        elif element.tag == "radiobuttongroup":
-            self.__current = ctsel.RadiobuttonGroup(parent, element)
+        elif xml.tag == "radiobuttongroup":
+            self.__current = ctsel.RadiobuttonGroup(parent, xml)
             return False
-        elif element.tag == "window":
-            self.__current = ctsel.TkWindow(element)
+        elif xml.tag == self.__windowName:
+            self.__current = ctsel.TkWindow(xml)
             self.__root = self.__current
         else:
-            print("=> tag ", element.tag, " does not exist.")
+            print("=> tag ", xml.tag, " does not exist.")
 
     def getCurrent(self):
+        """
+        Returns the current widget.
+
+        Returns
+        -------
+        object : The current widget of the builder instance.
+        """
         return self.__current
 
     def getRoot(self):
+        """
+        Returns the Root Element, normally an instance of TkWindow.
+
+        Returns
+        -------
+        ctsoft.gui.xml.TkWindow : The window widget.
+        """
         return self.__root
 
     def getRootName(self):
+        """
+        Returns the Root Element Name.
+
+        Returns
+        -------
+        string : The name of the root element of the XML document.
+        """
         return self.__rootName
 
     def getWidgetClassName(self, tagName):
+        """
+        Returns the Class Name of the submitted XML Tag Name.
+
+        Parameters
+        ----------
+        tagName : string
+            The tag name to transfer.
+
+        Returns
+        -------
+        string : The class names according to the submitted tag name.
+        """
         if tagName == "labelframe":
             className = "TkLabelFrame"
         elif tagName == "optionmenu":
@@ -131,7 +321,22 @@ class Builder:
         return className
 
     def getWindowName(self):
+        """
+        Returns the Tag Name of the Root Element.
+
+        Returns
+        -------
+        string : The tag name of the root element.
+        """
         return self.__windowName
 
     def setCurrent(self, current):
+        """
+        Sets the curren Widget.
+
+        Parameters
+        ----------
+        current : object
+            One of the Tkinter extensions in the ctsoft.gui.elements modul.
+        """
         self.__current = current
