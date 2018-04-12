@@ -16,6 +16,25 @@ class Controller(object):
     """
     The GUI Controller with basic Functionality.
     It is the start point of the GUI.
+
+    Methods
+    -------
+    addWidget :
+        Adds a widget with the specified key to the collection.
+    changeImage :
+        Changes the displayed image of the specified widget.
+    createGui :
+        Creates the GUI by calling corresponding ctsoft.gui.xml.Parser methods.
+    getWidget :
+        Returns the widget with the specified identifier.
+    getWidgets :
+        Returns the widget collection.
+    openFileDialog :
+        Opens the file dialog.
+    setIdentifier :
+        Sets the identifier name.
+    runGui :
+        Runs the GUI by starting the mainloop thread.
     """
 
     def __init__(self):
