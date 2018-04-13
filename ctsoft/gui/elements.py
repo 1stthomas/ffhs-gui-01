@@ -46,7 +46,7 @@ class TkBase(object):
     setRows :
         Configures the rows by the grid manager.
 
-    Properties
+    Attributes
     ----------
     methodTo1Option : dict
         Definitions, which attributes of the xml element will be called as
@@ -725,6 +725,26 @@ class TkScale(tk.Scale, TkWidgetSimple):
         TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
+class TkScrollbar(tk.Scrollbar, TkWidgetSimple):
+    """
+    Extends tk.Scrollbar and TkWidgetSimple.
+    This Object is an Extension of the Tkinter Scrollbar Widget which is
+    needed to make it possible to build a GUI with XML Definitions.
+    """
+
+    def __init__(self, master, *args, **kw):
+        """
+        Instanciates a TkScrollbar.
+
+        Parameters
+        ----------
+        master : xml.etree.ElementTree
+            The element definitions of the new TkScrollbar.
+        """
+        tk.Scrollbar.__init__(self, master)
+        TkWidgetSimple.__init__(self, master, *args, **kw)
+
+
 class TkText(tk.Text, TkWidgetSimple):
     """
     Extends tk.Text and TkWidgetSimple.
@@ -913,7 +933,94 @@ class RadiobuttonGroup(object):
 
         Returns
         -------
-        mixed : The value of the selected Radiobutton widget as tk.IntVar or
-            tk.StringVar.
+        mixed : The value of the selected Radiobutton widget as tk.IntVar.get()
+            or tk.StringVar.get().
         """
         return self.__variable.get()
+
+
+class ContainerScrollable(object):
+    def __init__(self, parent, xml, *args, **kw):
+        self.__canvas = None
+        self.__content = None
+        self.__parent = parent
+
+        self.createWidgets(xml)
+
+    def createScrollbarWidget(self, parent, canvas, xml):
+        sb = TkScrollbar(parent, xml)
+        orientation = getattr(self.canvas, "orient", "vertical")
+        if orientation == "vertical":
+            xml.attrib["orient"] = "vertical"
+            self.canvas.configure(yscrollcommand=sb.set)
+            sb.configure(command=self.canvas.yview)
+        else:
+            self.canvas.configure(xscrollcommand=sb.set)
+            sb.configure(command=self.canvas.xview)
+        return sb
+
+    def createWidgets(self, xml):
+        parent = self.getParent()
+        xmlSetup = xml.find("setup")
+        xmlCanvas = xmlSetup.find("canvas")
+        self.canvas = TkCanvas(parent, xmlCanvas)
+        self.canvas.pack(self.getPackOptions(xmlCanvas))
+        xmlFrame = xmlCanvas.find("frame")
+        frame = TkFrame(self.canvas, xmlFrame)
+
+        xmlScrollbars = xmlSetup.findall("scrollbar")
+        for xmlScrollbar in xmlScrollbars:
+            sb = self.createScrollbarWidget(parent, self.canvas, xmlScrollbar)
+            sb.pack(self.getPackOptions(xmlScrollbar))
+
+        self.canvas.create_window((0,0), window=frame,
+                                  anchor="nw", tags="frame")
+        frame.bind("<Configure>", self.onFrameConfigure)
+
+        self.populate(frame)
+        self.setContent({})
+
+    def getPackOptions(self, xmlWidget):
+        packOptions = xmlWidget.find("pack")
+        if packOptions:
+            return packOptions
+        else:
+            packOptions = {}
+
+        if xmlWidget.tag == "canvas":
+            packOptions["expand"] = "True"
+            packOptions["fill"] = "both"
+            packOptions["side"] = "left"
+        elif xmlWidget.tag == "frame":
+            packOptions["expand"] = "True"
+            packOptions["fill"] = "both"
+            packOptions["side"] = "top"
+        elif xmlWidget.tag == "scrollbar":
+            if xmlWidget.attrib["orient"] == "vertical":
+#            if getattr(xmlWidget.attrib, "orient") == "vertical":
+                packOptions["fill"] = "y"
+                packOptions["side"] = "right"
+            else:
+                packOptions["fill"] = "x"
+                packOptions["side"] = "left"
+
+        return packOptions
+
+    def getContent(self):
+        return self.__content
+
+    def getParent(self):
+        return self.__parent
+
+    def onFrameConfigure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def setContent(self, xml):
+        self.__content = xml
+
+    def populate(self, frame):  # just for testing..
+        for row in range(100):
+            tk.Label(frame, text="%s" % row, width=3, borderwidth="1",
+                     relief="solid").grid(row=row, column=0)
+            t = "this is the second column for row %s" %row
+            tk.Label(frame, text=t).grid(row=row, column=1)

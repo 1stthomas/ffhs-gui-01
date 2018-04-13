@@ -144,12 +144,16 @@ class Parser(object):
         if doRec is False:
             return
 
-        elements = element.findall("*")
+        if self.__builder.doChangeXml():
+            element = self.__builder.getChangedXml()
 
-        for el in elements:
-            self.parseXml(el, parent)
+        if element:
+            elements = element.findall("*")
 
-        self.__builder.close(parent, element)
+            for el in elements:
+                self.parseXml(el, parent)
+
+            self.__builder.close(parent, element)
 
     def setIdentifier(self, identifier):
         """
@@ -189,14 +193,16 @@ class Builder:
         Sets the current widget.
     """
     def __init__(self):
+        self.__changedXml = None
         self.__current = None
+        self.__doChangeXml = False
         self.__root = None
         self.__rootName = "gui"
         self.__skippedWidgets = ["grid", "image", "pack", "row"]
         self.__widgets = ["button", "canvas", "checkbutton", "entry",
                           "frame", "label", "labelframe", "listbox",
                           "menu", "optionmenu", "radiobutton", "scale",
-                          "text"]
+                          "scrollbar", "text"]
         self.__windowName = "window"
 
     def checkRootTag(self, element):
@@ -248,6 +254,7 @@ class Builder:
         parent : xml.etree.ElementTree
             The parent widget of the new one.
         """
+        self.__doChangeXml = False
         if xml.tag in self.__skippedWidgets:
             return False
         elif xml.tag in self.__widgets:
@@ -262,11 +269,22 @@ class Builder:
         elif xml.tag == "radiobuttongroup":
             self.__current = ctsel.RadiobuttonGroup(parent, xml)
             return False
+        elif xml.tag == "scrollable":
+            print("builder scrollable")
+            self.__current = ctsel.ContainerScrollable(parent, xml)
+            self.setChangedXml(self.__current.getContent())
+            self.__doChangeXml = True
         elif xml.tag == self.__windowName:
             self.__current = ctsel.TkWindow(xml)
             self.__root = self.__current
         else:
             print("=> tag ", xml.tag, " does not exist.")
+
+    def doChangeXml(self):
+        return self.__doChangeXml
+
+    def getChangedXml(self):
+        return self.__changedXml
 
     def getCurrent(self):
         """
@@ -329,6 +347,9 @@ class Builder:
         string : The tag name of the root element.
         """
         return self.__windowName
+
+    def setChangedXml(self, xml):
+        self.__changedXml = xml
 
     def setCurrent(self, current):
         """
