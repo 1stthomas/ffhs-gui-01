@@ -270,7 +270,6 @@ class Builder:
             self.__current = ctsel.RadiobuttonGroup(parent, xml)
             return False
         elif xml.tag == "scrollable":
-            print("builder scrollable")
             self.__current = ctsel.ContainerScrollable(parent, xml)
             self.setChangedXml(self.__current.getContent())
             self.__doChangeXml = True

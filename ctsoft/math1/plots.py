@@ -50,7 +50,7 @@ class Plotter(object):
         return self.__fName
 
     def createHistogram(self, data):
-        num_bins = 5
+        num_bins = 50
         n, bins, patches = plt.hist(data, num_bins)
 #        n, bins, patches = plt.hist(data, num_bins, facecolor="blue")
         plt.savefig(self.__fName)

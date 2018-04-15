@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <window bg="#EFEFEF" title="FFHS - AWD - PVA 2">
+    <!--<window bg="#EFEFEF" minsize-x="50" minsize-y="50" title="FFHS - AWD - PVA 2">-->
+        <!--<row num="0" weight="1" />-->
+        <scrollable>
+            <setup>
+                <canvas bg="red" highlightthickness="0">
+                    <frame bg="green">
+                        <dimension fill="both" />
+                    </frame>
+                </canvas>
+                <scrollbar orient="horizontal" />
+                <scrollbar orient="vertical" />
+            </setup>
+            <content>
+                
+            </content>
+        </scrollable>
+    </window>
+</gui>

@@ -9,6 +9,7 @@ import os
 from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter.font import Font as tkFont
+import xml.etree.ElementTree as xmlee
 
 
 class TkBase(object):
@@ -942,69 +943,102 @@ class RadiobuttonGroup(object):
 class ContainerScrollable(object):
     def __init__(self, parent, xml, *args, **kw):
         self.__canvas = None
+        self.__canvasFrameDimension = None
         self.__content = None
+        self.__frame = None
         self.__parent = parent
+        self.__scrollbars = {}
 
         self.createWidgets(xml)
 
-    def createScrollbarWidget(self, parent, canvas, xml):
+    def addScrollbar(self, orient, scrollbar):
+        self.__scrollbars[orient] = scrollbar
+
+    def createCanvas(self, parent, xmlCanvas):
+        canvas = TkCanvas(parent, xmlCanvas)
+        canvas.grid(column=0, row=0, sticky="nwse")
+        self.setCanvas(canvas)
+
+        return canvas
+
+    def createCanvasFrame(self, parent, xml):
+        frame = TkFrame(parent, xml)
+        self.setCanvasFrame(frame)
+
+        return frame
+
+    def createScrollbarWidget(self, parent, xml):
         sb = TkScrollbar(parent, xml)
-        orientation = getattr(self.canvas, "orient", "vertical")
-        if orientation == "vertical":
+
+        if xml.attrib.get("orient", "vertical") == "vertical":
+            # Set the default value for the case it is not set already.
             xml.attrib["orient"] = "vertical"
-            self.canvas.configure(yscrollcommand=sb.set)
-            sb.configure(command=self.canvas.yview)
+            # Compose the Canvas scrollcommand for y with the scrollbar.
+            self.__canvas.configure(yscrollcommand=sb.set)
+            # Compose the scrollbar action with the canvas viewport.
+            sb.configure(command=self.__canvas.yview)
+            # configure the layout manager of the scrollbar
+            sb.grid(column=1, row=0, sticky="nes")
         else:
-            self.canvas.configure(xscrollcommand=sb.set)
-            sb.configure(command=self.canvas.xview)
+            # The vertical orientation is default.
+            sb.configure(orient="horizontal")
+            self.__canvas.configure(xscrollcommand=sb.set)
+            sb.configure(command=self.__canvas.xview)
+            sb.grid(column=0, row=1, sticky="esw")
+
+        self.addScrollbar(xml.attrib["orient"], sb)
+
         return sb
 
     def createWidgets(self, xml):
         parent = self.getParent()
         xmlSetup = xml.find("setup")
+
         xmlCanvas = xmlSetup.find("canvas")
-        self.canvas = TkCanvas(parent, xmlCanvas)
-        self.canvas.pack(self.getPackOptions(xmlCanvas))
+        canvas = self.createCanvas(parent, xmlCanvas)
+
         xmlFrame = xmlCanvas.find("frame")
-        frame = TkFrame(self.canvas, xmlFrame)
+        frame = self.createCanvasFrame(canvas, xmlFrame)
 
         xmlScrollbars = xmlSetup.findall("scrollbar")
         for xmlScrollbar in xmlScrollbars:
-            sb = self.createScrollbarWidget(parent, self.canvas, xmlScrollbar)
-            sb.pack(self.getPackOptions(xmlScrollbar))
+            self.createScrollbarWidget(parent, xmlScrollbar)
 
-        self.canvas.create_window((0,0), window=frame,
-                                  anchor="nw", tags="frame")
+        # Define the row and column behavior on resizing.
+        parent.rowconfigure(0, weight=1)
+        parent.rowconfigure(1, weight=0)
+        parent.columnconfigure(0, weight=1)
+        parent.columnconfigure(1, weight=0)
+
+        self.canvasWindow = canvas.create_window((0, 0), window=frame,
+                                                 anchor="nw",
+                                                 tags="self.__frame")
+
         frame.bind("<Configure>", self.onFrameConfigure)
+
+        # make sure the inner frames size is filled and updated if defined.
+        self.defineCanvasFrameDimension(xmlFrame)
+        self.setFrameDimensions(frame, xmlFrame)
 
         self.populate(frame)
         self.setContent({})
 
-    def getPackOptions(self, xmlWidget):
-        packOptions = xmlWidget.find("pack")
-        if packOptions:
-            return packOptions
-        else:
-            packOptions = {}
+    def defineCanvasFrameDimension(self, xml):
+        xmlDimension = xml.find("dimension")
 
-        if xmlWidget.tag == "canvas":
-            packOptions["expand"] = "True"
-            packOptions["fill"] = "both"
-            packOptions["side"] = "left"
-        elif xmlWidget.tag == "frame":
-            packOptions["expand"] = "True"
-            packOptions["fill"] = "both"
-            packOptions["side"] = "top"
-        elif xmlWidget.tag == "scrollbar":
-            if xmlWidget.attrib["orient"] == "vertical":
-#            if getattr(xmlWidget.attrib, "orient") == "vertical":
-                packOptions["fill"] = "y"
-                packOptions["side"] = "right"
-            else:
-                packOptions["fill"] = "x"
-                packOptions["side"] = "left"
+        if "fill" in xmlDimension.attrib:
+            if xmlDimension.attrib["fill"] == "both":
+                self.__canvasFrameDimension = "both"
+            elif xmlDimension.attrib["fill"] == "x":
+                self.__canvasFrameDimension = "x"
+            elif xmlDimension.attrib["fill"] == "y":
+                self.__canvasFrameDimension = "y"
 
-        return packOptions
+    def getCanvas(self):
+        return self.__canvas
+
+    def getCanvasFrame(self):
+        return self.__frame
 
     def getContent(self):
         return self.__content
@@ -1012,15 +1046,51 @@ class ContainerScrollable(object):
     def getParent(self):
         return self.__parent
 
+    def getScrollbar(self, orient):
+        return self.__scrollbars.get(orient, None)
+
+    def getScrollbars(self):
+        return self.__scrollbars
+
+    def onCanvasFrameDimension(self, event):
+        canvas = self.getCanvas()
+        frame = self.getCanvasFrame()
+
+        canvasHeight = event.height
+        canvasWidth = event.width
+
+        if canvasWidth <= frame.winfo_reqwidth():
+            canvasWidth = frame.winfo_reqwidth()
+        if canvasHeight <= frame.winfo_reqheight():
+            canvasHeight = frame.winfo_reqheight()
+
+        if self.__canvasFrameDimension == "both":
+            canvas.itemconfig(self.canvasWindow, height=canvasHeight,
+                              width=canvasWidth)
+        elif self.__canvasFrameDimension == "x":
+            canvas.itemconfig(self.canvasWindow, width=canvasWidth)
+        elif self.__canvasFrameDimension == "y":
+            canvas.itemconfig(self.canvasWindow, height=canvasHeight)
+
     def onFrameConfigure(self, event):
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        self.getCanvas().configure(scrollregion=self.__canvas.bbox("all"))
+
+    def setCanvas(self, canvas):
+        self.__canvas = canvas
+
+    def setCanvasFrame(self, frame):
+        self.__frame = frame
 
     def setContent(self, xml):
         self.__content = xml
 
-    def populate(self, frame):  # just for testing..
-        for row in range(100):
-            tk.Label(frame, text="%s" % row, width=3, borderwidth="1",
+    def setFrameDimensions(self, frame, xml):
+        if self.__canvasFrameDimension is not None:
+            self.getCanvas().bind('<Configure>', self.onCanvasFrameDimension)
+
+    def populate(self, parent):  # just for testing..
+        for row in range(15):
+            tk.Label(parent, text="%s" % row, width=3, borderwidth="1",
                      relief="solid").grid(row=row, column=0)
-            t = "this is the second column for row %s" %row
-            tk.Label(frame, text=t).grid(row=row, column=1)
+            t = "this is the second column for row %s" % row
+            tk.Label(parent, text=t).grid(row=row, column=1)

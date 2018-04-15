@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <!--<window bg="#EFEFEF" title="FFHS - AWD - PVA 2">-->
+    <window bg="#EFEFEF" minsize-x="50" minsize-y="50" title="FFHS - AWD - PVA 2">
+        <row num="0" weight="1" />
+        <row num="1" weight="0" />
+        <canvas bg="orange" bd="2">
+            <grid column="0" row="0" sticky="nswe">
+                <column num="0" weight="1" />
+            </grid>
+            <!--<label bg="red" height="50" text="row 0, col 0" width="100">-->
+            <label bg="red" text="row 0, col 0">
+                <pack expand="True" fill="both" />
+            </label>
+        </canvas>
+        <frame>
+            <grid column="1" row="0">
+                <column num="1" weight="0" />
+            </grid>
+            <label bg="green" text="row 0, col 1">
+                <pack expand="True" fill="both" />
+            </label>
+        </frame>
+        <frame bg="cyan" bd="2">
+            <grid column="0" row="1" sticky="nswe">
+                <column num="0" weight="1" />
+            </grid>
+            <label bg="blue" text="row 1, col 0">
+                <pack />
+            </label>
+        </frame>
+        <frame>
+            <grid column="1" row="1">
+                <column num="1" weight="0" />
+            </grid>
+            <label bg="yellow" text="row 1, col 1">
+                <pack expand="True" fill="both" />
+            </label>
+        </frame>
+    </window>
+</gui>

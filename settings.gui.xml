@@ -112,10 +112,13 @@
                         <pack expand="true" fill="both" />
                     </canvas>
                 </frame>
-                <frame bd="2" relief="sunken">
+                <frame bd="2" relief="sunken" height="100">
                     <grid row="1" column="1" sticky="nesw">
                         <column num="1" weight="1" uniform="group2" />
                     </grid>
+                    <scrollbar>
+                        <pack expand="true" fill="y" side="right" />
+                    </scrollbar>
                     <label anchor="nw" id="gui-message">
                         <pack expand="true" fill="both" side="top" />
                     </label>

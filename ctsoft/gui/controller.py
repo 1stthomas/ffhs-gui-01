@@ -43,7 +43,7 @@ class Controller(object):
         """ string : The name of the XML element id attribute. """
         self.__identifier = "id"
         """ ctsoft.gui.xml.Parser : The XMl parser. """
-        self.__parser = ctsxml.Parser(self, "settings.gui.xml")
+        self.__parser = ctsxml.Parser(self, "settings.gui.scrollbar.xml")
         """ mixed : None or the root Tkinter element after GUI creation. """
         self.__top = None
         """ dict : A collection of GUI widgets with an id. """

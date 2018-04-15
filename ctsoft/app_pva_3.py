@@ -116,7 +116,7 @@ class App(object):
 
     def run(self):
         self.__cntGui.createGui()
-        self.setupGui()
+#        self.setupGui()
         self.__cntGui.runGui()
 
     def setFileName(self, fname):
