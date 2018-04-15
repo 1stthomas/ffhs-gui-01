@@ -8,6 +8,7 @@ Created on Sun Mar  4 14:46:05 2018
 import tkinter as tk
 import xml.etree.ElementTree as xmlee
 import ctsoft.gui.elements as ctsel
+import ctsoft.gui.extensions as ctsex
 
 
 class Parser(object):
@@ -267,10 +268,10 @@ class Builder:
                     # only the last one will be displayed
                     self.__current.setImage(image)
         elif xml.tag == "radiobuttongroup":
-            self.__current = ctsel.RadiobuttonGroup(parent, xml)
+            self.__current = ctsex.RadiobuttonGroup(parent, xml)
             return False
         elif xml.tag == "scrollable":
-            self.__current = ctsel.ContainerScrollable(parent, xml)
+            self.__current = ctsex.ContainerScrollable(parent, xml)
             self.setChangedXml(self.__current.getContent())
             self.__doChangeXml = True
         elif xml.tag == self.__windowName:
