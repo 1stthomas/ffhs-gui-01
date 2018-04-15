@@ -211,6 +211,8 @@ class ContainerScrollable(object):
                                                  tags="self.__frame")
 
         frame.bind("<Configure>", self.onFrameConfigure)
+        frame.bind('<Enter>', self._bindMousewheel)
+        frame.bind('<Leave>', self._unbindMousewheel)
 
         # make sure the inner frames size is filled and updated if defined.
         self.defineCanvasFrameDimension(xmlFrame)
@@ -285,8 +287,20 @@ class ContainerScrollable(object):
             self.getCanvas().bind('<Configure>', self.onCanvasFrameDimension)
 
     def populate(self, parent):  # just for testing..
-        for row in range(15):
+        for row in range(100):
             tk.Label(parent, text="%s" % row, width=3, borderwidth="1",
                      relief="solid").grid(row=row, column=0)
             t = "this is the second column for row %s" % row
             tk.Label(parent, text=t).grid(row=row, column=1)
+
+    def _bindMousewheel(self, event):
+        canvas = self.getCanvas()
+        canvas.bind_all("<MouseWheel>", self._onMousewheel)
+
+    def _onMousewheel(self, event):
+        canvas = self.getCanvas()
+        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+    def _unbindMousewheel(self, event):
+        canvas = self.getCanvas()
+        canvas.unbind_all("<MouseWheel>")
