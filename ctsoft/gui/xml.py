@@ -143,17 +143,27 @@ class Parser(object):
             self.addElementById(element, parent)
 
         if doRec is False:
+            # do not parse inner elements
             return
 
+        if self.__builder.doChangeParent():
+            # change the parent due to a tkinter extension which has another
+            # parent to append the inner elements
+            parent = self.__builder.getChangedParent()
+
         if self.__builder.doChangeXml():
+            # change the xml due to a tkinter extension which has another
+            # xml element with content
             element = self.__builder.getChangedXml()
 
         if element:
             elements = element.findall("*")
 
             for el in elements:
+                # parse the inner elements
                 self.parseXml(el, parent)
 
+            # handle grid layout settings
             self.__builder.close(parent, element)
 
     def setIdentifier(self, identifier):
@@ -194,8 +204,10 @@ class Builder:
         Sets the current widget.
     """
     def __init__(self):
+        self.__changedParent = None
         self.__changedXml = None
         self.__current = None
+        self.__doChangeParent = False
         self.__doChangeXml = False
         self.__root = None
         self.__rootName = "gui"
@@ -272,16 +284,24 @@ class Builder:
             return False
         elif xml.tag == "scrollable":
             self.__current = ctsex.ContainerScrollable(parent, xml)
-            self.setChangedXml(self.__current.getContent())
+            self.__doChangeParent = True
+            self.__changedParent = self.__current.getChangedParent()
             self.__doChangeXml = True
+            self.__changedXml = self.__current.getXmlContent()
         elif xml.tag == self.__windowName:
             self.__current = ctsel.TkWindow(xml)
             self.__root = self.__current
         else:
             print("=> tag ", xml.tag, " does not exist.")
 
+    def doChangeParent(self):
+        return self.__doChangeXml
+
     def doChangeXml(self):
         return self.__doChangeXml
+
+    def getChangedParent(self):
+        return self.__changedParent
 
     def getChangedXml(self):
         return self.__changedXml
@@ -347,6 +367,9 @@ class Builder:
         string : The tag name of the root element.
         """
         return self.__windowName
+
+    def setChangedParent(self, parent):
+        self.__changedParent = parent
 
     def setChangedXml(self, xml):
         self.__changedXml = xml

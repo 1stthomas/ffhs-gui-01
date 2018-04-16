@@ -140,12 +140,14 @@ class ContainerScrollable(object):
     def __init__(self, parent, xml, *args, **kw):
         self.__canvas = None
         self.__canvasFrameDimension = None
-        self.__content = None
+        self.__changedParent = None
         self.__frame = None
         self.__parent = parent
         self.__scrollbars = {}
+        self.__xmlContent = None
 
         self.createWidgets(xml)
+        self.handleContent(xml)
 
     def addScrollbar(self, orient, scrollbar):
         self.__scrollbars[orient] = scrollbar
@@ -210,7 +212,7 @@ class ContainerScrollable(object):
                                                  anchor="nw",
                                                  tags="self.__frame")
 
-        frame.bind("<Configure>", self.onFrameConfigure)
+        frame.bind("<Configure>", self._onFrameConfigure)
         frame.bind('<Enter>', self._bindMousewheel)
         frame.bind('<Leave>', self._unbindMousewheel)
 
@@ -218,8 +220,8 @@ class ContainerScrollable(object):
         self.defineCanvasFrameDimension(xmlFrame)
         self.setFrameDimensions(frame, xmlFrame)
 
-        self.populate(frame)
-        self.setContent({})
+#        self.populate(frame)
+#        self.setContent({})
 
     def defineCanvasFrameDimension(self, xml):
         xmlDimension = xml.find("dimension")
@@ -238,8 +240,8 @@ class ContainerScrollable(object):
     def getCanvasFrame(self):
         return self.__frame
 
-    def getContent(self):
-        return self.__content
+    def getChangedParent(self):
+        return self.__changedParent
 
     def getParent(self):
         return self.__parent
@@ -249,6 +251,14 @@ class ContainerScrollable(object):
 
     def getScrollbars(self):
         return self.__scrollbars
+
+    def getXmlContent(self):
+        return self.__xmlContent
+
+    def handleContent(self, xml):
+        self.setXmlContent(xml.find("content"))
+        self.setChangedParent(self.getCanvasFrame())
+#            xmlContent = xmlRoot.find("content")
 
     def onCanvasFrameDimension(self, event):
         canvas = self.getCanvas()
@@ -270,21 +280,21 @@ class ContainerScrollable(object):
         elif self.__canvasFrameDimension == "y":
             canvas.itemconfig(self.canvasWindow, height=canvasHeight)
 
-    def onFrameConfigure(self, event):
-        self.getCanvas().configure(scrollregion=self.__canvas.bbox("all"))
-
     def setCanvas(self, canvas):
         self.__canvas = canvas
 
     def setCanvasFrame(self, frame):
         self.__frame = frame
 
-    def setContent(self, xml):
-        self.__content = xml
+    def setChangedParent(self, parent):
+        self.__changedParent = parent
 
     def setFrameDimensions(self, frame, xml):
         if self.__canvasFrameDimension is not None:
             self.getCanvas().bind('<Configure>', self.onCanvasFrameDimension)
+
+    def setXmlContent(self, xmlContent):
+        self.__xmlContent = xmlContent
 
     def populate(self, parent):  # just for testing..
         for row in range(100):
@@ -296,6 +306,9 @@ class ContainerScrollable(object):
     def _bindMousewheel(self, event):
         canvas = self.getCanvas()
         canvas.bind_all("<MouseWheel>", self._onMousewheel)
+
+    def _onFrameConfigure(self, event):
+        self.getCanvas().configure(scrollregion=self.__canvas.bbox("all"))
 
     def _onMousewheel(self, event):
         canvas = self.getCanvas()
