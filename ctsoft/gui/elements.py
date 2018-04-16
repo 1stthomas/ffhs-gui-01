@@ -400,10 +400,13 @@ class TkWidget(TkBase):
         elif grid:
             self.grid(grid[0].attrib)
             parent = self.getParent()
-            parentAttr = grid[0].findall("column")[0]
-            num = parentAttr.attrib["num"]
-            del parentAttr.attrib["num"]
-            parent.columnconfigure(num, parentAttr.attrib)
+
+            col = grid[0].findall("column")
+            if col:
+                parentAttr = col[0]
+                num = parentAttr.attrib["num"]
+                del parentAttr.attrib["num"]
+                parent.columnconfigure(num, parentAttr.attrib)
             self.setOrganizeType("grid")
             parent.setOrganizeTypeChildren("grid")
 
