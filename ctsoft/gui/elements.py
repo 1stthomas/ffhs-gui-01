@@ -548,24 +548,76 @@ class TkCheckbutton(tk.Checkbutton, TkWidgetSimple):
         TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
-class TkEntry(tk.Entry, TkWidgetSimple):
+class TkEntry(tk.Entry, TkWidget):
     """
     Extends tk.Entry and TkWidgetSimple.
     This Object is an Extension of the Tkinter Entry Widget which is
     needed to make it possible to build a GUI with XML Definitions.
+
+    Methods
+    -------
+    getTextValue :
+        Returns the text attribute value.
+    setText :
+        Sets the value of the entry.
     """
 
-    def __init__(self, master, *args, **kw):
+    def __init__(self, master, xml, *args, **kw):
         """
         Instanciates a TkEntry.
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
+        master : object
+            The parent of the new TkEntry.
+        xml : xml.etree.ElementTree
             The element definitions of the new TkEntry.
         """
         tk.Entry.__init__(self, master)
-        TkWidgetSimple.__init__(self, master, *args, **kw)
+        TkWidget.__init__(self, master, xml, *args, **kw)
+
+        self.__v = tk.StringVar("")
+        self.configure(textvariable=self.__v)
+
+        if xml:
+            text = self.getTextValue(xml)
+            self.setText(text)
+            self.setOptions(xml.attrib)
+            self.organize(xml)
+
+    def getTextValue(self, xml):
+        """
+        Returns the Text Attribute Value if present and removes it.
+        If no Text Attribute could be found, the Value will be an empty String.
+
+        Parameters
+        ----------
+        xml : xml.etree.ElementTree
+            The entry element defninitions.
+
+        Returns
+        -------
+        string : The value of the text attribute if present, otherwise an
+            empty string.
+        """
+        text = xml.attrib.get("text", None)
+
+        if text is not None:
+            del xml.attrib["text"]
+        else:
+            text = ""
+
+        return text
+
+    def setText(self, text):
+        """
+        Sets the Text of the current Entry Widget.
+
+        Parameters
+        ----------
+        string : The new value of the entry widget.
+        """
+        self.__v.set(text)
 
 
 class TkFrame(tk.Frame, TkWidgetSimple):
