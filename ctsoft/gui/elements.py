@@ -421,6 +421,7 @@ class TkWidget(TkBase):
         """
         self.createImage(xml.attrib)
         self.image = self.getPhotoImage()
+        self.configure(image=self.image)
 
     def setParent(self, parent):
         """
