@@ -449,8 +449,8 @@ class TkWidgetSimple(TkWidget):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkWidgetSimple.
+        master : object
+            The parent widget of the new TkWidgetSimple.
         element : xml.etree.ElementTree
             The element definitions of the new TkWidgetSimple.
         """
@@ -474,8 +474,8 @@ class TkButton(tk.Button, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkButton.
+        master : object
+            The parent widget of the new TkButton.
         """
         tk.Button.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -501,8 +501,8 @@ class TkCanvas(tk.Canvas, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkCanvas.
+        master : object
+            The parent widget of the new TkCanvas.
         """
         tk.Canvas.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -541,8 +541,8 @@ class TkCheckbutton(tk.Checkbutton, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkCheckbutton.
+        master : object
+            The parent widget of the new TkCheckbutton.
         """
         tk.Checkbutton.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -633,8 +633,8 @@ class TkFrame(tk.Frame, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkFrame.
+        master : object
+            The parent widget of the new TkFrame.
         """
         tk.Frame.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -653,8 +653,8 @@ class TkLabel(tk.Label, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkLabel.
+        master : object
+            The parent widget of the new TkLabel.
         """
         tk.Label.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -673,8 +673,8 @@ class TkLabelFrame(tk.LabelFrame, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkLabelFrame.
+        master : object
+            The parent widget of the new TkLabelFrame.
         """
         tk.LabelFrame.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -693,8 +693,8 @@ class TkListbox(tk.Listbox, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkListbox.
+        master : object
+            The parent widget of the new TkListbox.
         """
         tk.Listbox.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -713,8 +713,8 @@ class TkMenu(tk.Menu, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkMenu.
+        master : object
+            The parent widget of the new TkMenu.
         """
         tk.Menu.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -733,8 +733,8 @@ class TkOptionMenu(tk.OptionMenu, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkOptionMenu.
+        master : object
+            The parent widget of the new TkOptionMenu.
         """
         tk.OptionMenu.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -753,8 +753,8 @@ class TkRadiobutton(tk.Radiobutton, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkRadiobutton.
+        master : object
+            The parent widget of the new TkRadiobutton.
         """
         tk.Radiobutton.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -773,8 +773,8 @@ class TkScale(tk.Scale, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkScale.
+        master : object
+            The parent widget of the new TkScale.
         """
         tk.Scale.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -793,8 +793,8 @@ class TkScrollbar(tk.Scrollbar, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkScrollbar.
+        master : object
+            The parent widget of the new TkScrollbar.
         """
         tk.Scrollbar.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -813,8 +813,8 @@ class TkText(tk.Text, TkWidgetSimple):
 
         Parameters
         ----------
-        master : xml.etree.ElementTree
-            The element definitions of the new TkText.
+        master : object
+            The parent widget of the new TkText.
         """
         tk.Text.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
@@ -840,8 +840,8 @@ class TkWindow(tk.Tk, TkBase):
 
         Parameters
         ----------
-        element : xml.etree.ElementTree
-            The element definitions of the new TkWindow.
+        element : object
+            The parent widget of the new TkWindow.
         """
         tk.Tk.__init__(self)
         TkBase.__init__(self)
