@@ -2,7 +2,7 @@
 """
 Created on Sun Apr 15 21:41:25 2018
 
-@author: zoom4u
+@author: ctsoft
 """
 
 import tkinter as tk
@@ -221,7 +221,6 @@ class ContainerScrollable(object):
         self.setFrameDimensions(frame, xmlFrame)
 
 #        self.populate(frame)
-#        self.setContent({})
 
     def defineCanvasFrameDimension(self, xml):
         xmlDimension = xml.find("dimension")
@@ -258,7 +257,6 @@ class ContainerScrollable(object):
     def handleContent(self, xml):
         self.setXmlContent(xml.find("content"))
         self.setChangedParent(self.getCanvasFrame())
-#            xmlContent = xmlRoot.find("content")
 
     def onCanvasFrameDimension(self, event):
         canvas = self.getCanvas()

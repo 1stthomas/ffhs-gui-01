@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <window bg="#EFEFEF" title="FFHS - AWD - PVA 2">
+        <frame>
+            <pack expand="True" fill="both" side="top" />
+            <frame bd="1" bg="#eee" relief="sunken">
+                <pack fill="x" side="top" />
+                <button id="toolbar-button-nfi" height="18" width="18">
+                    <pack side="left" />
+                    <image height="16" path="/ctsoft/gui/icons/blank-file_grey_16_16.png" width="16" />
+                </button>
+                <button id="toolbar-button-sfi" height="18" width="18">
+                    <pack side="left" />
+                    <image height="16" path="/ctsoft/gui/icons/save-file-option_grey_16_16.png" width="16" />
+                </button>
+                <button id="toolbar-button-ofi" height="18" width="18">
+                    <pack side="left" />
+                    <image height="16" path="/ctsoft/gui/icons/open-folder_grey_16_16.png" width="16" />
+                </button>
+                <label text="toolbar">
+                    <pack side="left" />
+                </label>
+            </frame>
+            <frame bg="#eee">
+                <pack expand="True" fill="both" side="top" />
+                <scrollable>
+                    <setup>
+                        <canvas highlightthickness="0">
+                            <frame>
+                                <dimension fill="both" />
+                            </frame>
+                        </canvas>
+                        <scrollbar orient="horizontal" />
+                        <scrollbar orient="vertical" />
+                    </setup>
+                    <content>
+                        <frame bd="1" bg="grey" id="datatable-content-wrapper" relief="sunken">
+                            <pack expand="True" fill="both" side="top" />
+                            <frame id="datatable-content">
+                                <pack anchor="nw" expand="False" />
+                                <button id="datatable-content-0-0" padx="2" text=" ">
+                                    <grid column="0" row="0" sticky="nsew" />
+                                </button>
+                                <button id="datatable-content-0-1" text="A">
+                                    <grid column="1" row="0" sticky="nsew" />
+                                </button>
+                                <button id="datatable-content-1-0" padx="2" text="1">
+                                    <grid column="0" row="1" sticky="nsew">
+                                        <!--<column num="0" uniform="g1" weight="1" />-->
+                                    </grid>
+                                </button>
+                                <entry id="datatable-content-1-1" text="dsjnvdlsk skvnsdl vnsdlkvlsd vlsdv lsdjlvsdvl">
+                                    <grid column="1" row="1" sticky="nsew">
+                                        <!--<column num="0" uniform="g2" weight="1" />-->
+                                    </grid>
+                                </entry>
+                            </frame>
+                        </frame>
+                    </content>
+                </scrollable>
+            </frame>
+        </frame>
+    </window>
+</gui>

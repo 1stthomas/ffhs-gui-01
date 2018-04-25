@@ -129,6 +129,9 @@ class TkBase(object):
         """
         return self.__font
 
+    def getIdentifier(self):
+        return self.__id
+
     def getOrganizeType(self):
         """
         Returns the Organize Type of the current Instance.

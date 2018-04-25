@@ -55,7 +55,8 @@ class Parser(object):
         self.__method = method
         self.__builder = Builder()
 
-        self.__content = self.getFileContent(self.__filename)
+        if filename is not "":
+            self.__content = self.getFileContent(self.__filename)
 
     def addElementById(self, elementXml, elementTk):
         """
@@ -144,7 +145,7 @@ class Parser(object):
 
         if doRec is False:
             # do not parse inner elements
-            return
+            return parent
 
         if self.__builder.doChangeParent():
             # change the parent due to a tkinter extension which has another
@@ -165,6 +166,14 @@ class Parser(object):
 
             # handle grid layout settings
             self.__builder.close(parent, element)
+            
+        return parent
+
+    def setContent(self, content):
+        self.__content = content
+
+    def setController(self, controller):
+        self.__controller = controller
 
     def setIdentifier(self, identifier):
         """
@@ -211,7 +220,7 @@ class Builder:
         self.__doChangeXml = False
         self.__root = None
         self.__rootName = "gui"
-        self.__skippedWidgets = ["grid", "image", "pack", "row"]
+        self.__skippedWidgets = ["column", "grid", "image", "pack", "row"]
         self.__widgets = ["button", "canvas", "checkbutton", "entry",
                           "frame", "label", "labelframe", "listbox",
                           "menu", "optionmenu", "radiobutton", "scale",
