@@ -122,7 +122,7 @@ class Parser(object):
         -------
         xml.etree.ElementTree : The parsed XML document.
         """
-        return xmlee.parse(self.__filename).getroot()
+        return xmlee.parse(filename).getroot()
 
     def parseXml(self, element, parent):
         """
@@ -166,7 +166,7 @@ class Parser(object):
 
             # handle grid layout settings
             self.__builder.close(parent, element)
-            
+
         return parent
 
     def setContent(self, content):
@@ -224,7 +224,7 @@ class Builder:
         self.__widgets = ["button", "canvas", "checkbutton", "entry",
                           "frame", "label", "labelframe", "listbox",
                           "menu", "optionmenu", "radiobutton", "scale",
-                          "scrollbar", "text"]
+                          "scrollbar", "text", "toplevel"]
         self.__windowName = "window"
 
     def checkRootTag(self, element):
@@ -362,6 +362,8 @@ class Builder:
             className = "TkLabelFrame"
         elif tagName == "optionmenu":
             className = "TkOptionMenu"
+        elif tagName == "toplevel":
+            className = "TkToplevel"
         else:
             className = "Tk" + tagName.capitalize()
 

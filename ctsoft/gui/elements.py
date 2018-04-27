@@ -824,6 +824,29 @@ class TkText(tk.Text, TkWidgetSimple):
         TkWidgetSimple.__init__(self, master, *args, **kw)
 
 
+class TkToplevel(tk.Toplevel, TkBase):
+    def __init__(self, root, xml, *args, **kw):
+        tk.Toplevel.__init__(self, master=root)
+        TkBase.__init__(self)
+
+        self.methodTo1Option = {"title": "wm_title"}
+
+        self.setOptions(xml)
+
+    def setOptions(self, xml):
+        """
+        Overrides TkBase.setOptions() by calling following method sequence:
+            handle1ParamMethods
+            handle2ParamMethods
+            TkBase.setOptions
+
+        @Todo: Should be the TkBase.setOptions()!!
+        """
+        self.handle1ParamMethods(xml)
+
+        TkBase.setOptions(self, xml.attrib)
+
+
 class TkWindow(tk.Tk, TkBase):
     """
     Extends tk.Tk and TkBase.
