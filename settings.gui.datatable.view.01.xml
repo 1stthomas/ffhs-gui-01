@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <window bg="#EFEFEF" title="FFHS - AWD - PVA 2">
+        <scrollable>
+            <setup>
+                <canvas bg="red" highlightthickness="0">
+                    <frame bg="green">
+                        <dimension fill="both" />
+                    </frame>
+                </canvas>
+                <scrollbar orient="horizontal" />
+                <scrollbar orient="vertical" />
+            </setup>
+            <content>
+                <frame bg="white">
+                    <pack fill="x" side="top" />
+                    <label text="toolbar">
+                        <pack />
+                    </label>
+                </frame>
+                <frame bg="grey">
+                    <pack expand="True" fill="both" side="top" />
+                    <frame>
+                        <grid row="0" column="0">
+                        </grid>
+                        <button padx="2" text=" ">
+                            <grid row="0" column="0" />
+                        </button>
+                        <button text="__">
+                            <grid row="0" column="1" />
+                        </button>
+                    </frame>
+                    <frame>
+                        <grid row="1" column="0">
+                        </grid>
+                        <row num="0" weight="1" />
+                        <button padx="2" text=" ">
+                            <grid row="0" column="0">
+                                <column num="0" weight="1" uniform="g1" />
+                            </grid>
+                        </button>
+                        <entry>
+                            <grid row="0" column="1">
+                                <column num="0" weight="1" uniform="g2" />
+                            </grid>
+                        </entry>
+                    </frame>
+                    <frame>
+                        <grid row="2" column="0" />
+                        <button padx="2" text=" ">
+                            <grid row="0" column="0">
+                                <column num="0" weight="1" uniform="g1" />
+                            </grid>
+                        </button>
+                        <entry>
+                            <grid row="0" column="1">
+                                <column num="0" weight="1" uniform="g2" />
+                            </grid>
+                        </entry>
+                    </frame>
+                </frame>
+            </content>
+        </scrollable>
+    </window>
+</gui>

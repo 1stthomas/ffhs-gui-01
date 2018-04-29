@@ -12,37 +12,8 @@ import tkinter as tk
 from tkinter.filedialog import askopenfilename
 import xml.etree.ElementTree as xmlee
 import ctsoft.gui.elements as ctsel
+import ctsoft.gui.options as ctsop
 import ctsoft.gui.xml as ctsxml
-
-
-class Data(object):
-    """
-    The Model of the Datatable.
-    """
-    def __init__(self):
-        self.__dataFields = []
-
-    def addDataField(self, fName, data):
-        df = DataField(fName, data)
-        self.__dataFields.append(df)
-
-    def clearDataFields(self):
-        self.__dataFields = []
-
-    def getDataFields(self):
-        return self.__dataFields
-
-    def getError(self):
-        return self.__error
-
-    def raiseError(self):
-        error = self.getError()
-        if error is "":
-            error = "The data for the data table is mal formed."
-        raise ValueError(error)
-
-    def setError(self, error):
-        self.__error = error
 
 
 class DataCell(object):
@@ -154,7 +125,7 @@ class DataField(object):
         self.__data = []
         self.__defaults = {"delimiter": ","}
         self.__error = []
-        self.__indexField = indexField
+        self.__indexField = indexField  # not in use atm
         self.__widgets = {}
 
         self.setSettings(settings)
@@ -163,6 +134,10 @@ class DataField(object):
             self.setFileName(fName)
             self.loadData()
         else:
+            cols = len(data)
+            rows = len(data[0])
+            self.setCount("cols", cols)
+            self.setCount("rows", rows)
             self.setData(data)
 
     def addColumn(self, column):
@@ -328,8 +303,6 @@ class DataField(object):
                 column = DataColumn(col, settings)
                 self.addColumn(column)
                 index += 1
-        print("________datafield__________")
-        print(self.__widgets)
 
     def setError(self, error):
         self.__error = error
@@ -358,6 +331,7 @@ class Dt(object):
     The Controller of the Datatable.
     """
     def __init__(self, data=[]):
+        self.__cOption = None
         self.__data = []
         self.__defaults = {"delimiter": ","}
         self.__root = None
@@ -374,6 +348,11 @@ class Dt(object):
         if root is not None:
             root.mainloop()
 
+    def abortOptions(self):
+        cOption = self.getCurrentOptionWindow()
+        cOption.destroy()
+        cOption = None
+
     def addDataFieldByFileName(self, fName):
         settings = self.getSettings()
 
@@ -384,15 +363,37 @@ class Dt(object):
 
         print(self.__widgets)
 
+    def addDataFieldByNewTable(self, cols, rows):
+        settings = self.getSettings()
+        parent = self.getView().getDatatableContent()
+        settings.setParent(parent)
+        print("parent: ", parent)
+
+        self.destroyDataTableContent(0)
+
+        data = []
+        cells = []
+
+        for row in range(0, int(rows)):
+            cells.append("")
+
+        for col in range(0, int(cols)):
+            data.append(cells)
+
+        df = DataField(settings, 1, "", data)
+        self.__data.append(df)
+
+        print(self.__widgets)
+
     def addWidget(self, key, widget):
         self.__widgets[key] = widget
 
-#    def createNewTable(self, parent):
-#        self.removeTable(parent)
-#        self.getView().createTable(28, 12)
+    def closeOptions(self):
+        cOption = self.getCurrentOptionWindow()
+        cOption.destroy()
+        cOption = None
 
     def createView(self):
-#        parser = ctsxml.Parser()
         xml = self.getXml()
         view = View(self, None, xml)
         self.__view = view
@@ -400,13 +401,13 @@ class Dt(object):
 
         print(view.getWidgets())
 
-#        if root is not None:
-#            root.mainloop()
-
     def destroyDataTableContent(self, index):
         df = self.getDataByIndex(index)
         if df:
             df.destroy()
+
+    def getCurrentOptionWindow(self):
+        return self.__cOption
 
     def getData(self):
         return self.__data
@@ -429,16 +430,9 @@ class Dt(object):
     def getXml(self):
         return self.__xml
 
-#    def handleNewData(self, fName):
-#        data = self.loadData(fName)
-#        print("Loaded Data: ", data)
-#        self.createNewTable()
-
     def iniSettings(self):
         view = self.getView()
         parent = view.getDatatableContent()
-        print("___________________ iniSettings")
-        print(parent)
         parser = ctsxml.Parser(self, "")
         parser.setIdentifier("id")
 
@@ -469,15 +463,8 @@ class Dt(object):
         if fName:
             this.addDataFieldByFileName(fName)
 
-    def removeTable(self, el):
-        el.destroy()
-
-    def resetDataFieldByFileName(self, fName):
-        settings = self.getSettings()
-        df = DataField(settings, 1, fName)
-        self.__data = []
-        self.__data.append(df)
-        print(self.__widgets)
+    def setCurrentOptionWindow(self, cOption):
+        self.__cOption = cOption
 
     def setXmlFromFile(self, fName):
         self.__xml = xmlee.parse(fName).getroot()
@@ -487,6 +474,39 @@ class Dt(object):
 
         if view is None:
             view = View(self, None, self.getXml())
+
+    def showNewTableSettings(self):
+        root = self.getRoot()
+        settings = self.getSettings()
+        settings.setParent(None)
+        parser = settings.getParser()
+
+        xml = parser.getFileContent("settings.gui.new-table.xml")
+        xmlToplevel = xml.find("*")
+
+        options = ctsop.NewTable(self, root, settings, xmlToplevel)
+        options.createWindow()
+        options.display()
+        self.setCurrentOptionWindow(options)
+        options.display()
+
+
+class Toolbar(object):
+    def __init__(self, dt, parent, xml):
+        self.__dt = None
+        self.__parent = None
+
+    def getDt(self):
+        return self.__dt
+
+    def getParent(self):
+        return self.__parent
+
+    def setDt(self, dt):
+        self.__dt = dt
+
+    def setParent(self, parent):
+        self.__parent = parent
 
 
 class View(object):
@@ -548,10 +568,12 @@ class View(object):
     def getParent(self):
         return self.__parent
 
+    def getRoot(self):
+        return self.__root
+
     def getTableTemplate(self):
         xml = self.getXml()
         tableTemplate = xml.find(".//*[@id='datatable-wrapper-content']")
-        print(tableTemplate)
         return tableTemplate
 
     def getWidgets(self):
@@ -577,13 +599,69 @@ class View(object):
 
         dtwc = self.getDatatableContentWrapper()
         nfiButton = self.getNewFileButton()
-        nfiButton.configure(command=lambda arg=dtwc: dt.createNewTable(arg))
+        nfiButton.configure(command=lambda arg=dtwc: dt.showNewTableSettings())
 
 
-class SettingsDataCell(object):
-    def __init__(self, parent, parser, xml):
+class Settings(object):
+    def __init__(self, parent, parser):
+        self.__parent = None
+        self.__parser = None
+
+        self.setParent(parent)
+        self.setParser(parser)
+
+    def getParent(self):
+        return self.__parent
+
+    def getParser(self):
+        return self.__parser
+
+    def setParent(self, parent):
         self.__parent = parent
+
+    def setParser(self, parser):
         self.__parser = parser
+
+
+class SettingsXml(object):
+    def __init__(self, parent, parser, xml=None):
+        Settings.__init__(self, parent, parser)
+        self.__xml = None
+
+        if xml:
+            self.setXml(xml)
+
+    def getXml(self):
+        return self.__xml
+
+    def setXml(self, xml):
+        self.__xml = xml
+
+
+class SettingsToolbar(SettingsXml):
+    def __init__(self, parent, parser, xml):
+        Settings.__init__(self, parent, parser)
+        self.__xml = None
+        self.__xmlRootIdentifier = ""
+
+        if xml:
+            self.setXml(xml)
+
+    def setXml(self, xml):
+        parser = self.getParser()
+        identifier = parser.getIdentifier()
+        if identifier in xml.attrib and \
+                xml.attrib[identifier] == "toolbar-wrapper":
+            self.__xml = xml
+        else:
+            root = xml.find(".//*[@id='toolbar-wrapper']")
+            if root:
+                self.__xml = root
+
+
+class SettingsDataCell(Settings):
+    def __init__(self, parent, parser, xml):
+        Settings.__init__(self, parent, parser)
         self.__xml = xml
 
     def getIndex(self, iType):
@@ -591,12 +669,6 @@ class SettingsDataCell(object):
             return self.__indexColumn
         elif iType is "row":
             return self.__indexRow
-
-    def getParent(self):
-        return self.__parent
-
-    def getParser(self):
-        return self.__parser
 
     def getXml(self, key="input"):
         if key is "input" or key is "topLeft" or key is "top" or key is "left":

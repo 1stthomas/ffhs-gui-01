@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <toplevel geometry="400x450" resizable-x="False" resizable-y="False" takefocus="True" title="New Table">
+        <frame bd="2" padx="10" pady="10" relief="sunken">
+            <pack expand="True" fill="both" />
+            <row num="0" weight="1" />
+            <row num="1" weight="0" />
+            <row num="2" weight="0" />
+            <frame bd="2" padx="10" pady="10" relief="raised">
+                <grid column="0" sticky="wnes" row="0">
+                    <column num="0" weight="1" />
+                </grid>
+                <labelframe padx="5" pady="7" text="Dimension">
+                    <grid column="0" sticky="wne" row="0">
+                        <column num="0" weight="1" />
+                    </grid>
+                    <label text="Anzahl Spalten:">
+                        <grid column="0" sticky="w" row="0" />
+                    </label>
+                    <entry id="options-new-table-cols" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="1" />
+                    </entry>
+                    <label text="Anzahl Zeilen">
+                        <grid column="0" sticky="w" row="2" />
+                    </label>
+                    <entry id="options-new-table-rows" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="3" />
+                    </entry>
+                </labelframe>
+            </frame>
+            <frame pady="9">
+                <grid column="0" sticky="esw" row="1">
+                    <column num="0" weight="1" />
+                </grid>
+                <label text=" ">
+                    <pack />
+                </label>
+            </frame>
+            <frame>
+                <grid column="0" sticky="esw" row="1">
+                    <column num="0" weight="1" />
+                </grid>
+                <frame>
+                    <pack side="right" />
+                    <button id="options-button-new-table" padx="3" text="Erstellen">
+                        <pack />
+                    </button>
+                </frame>
+                <frame padx="10">
+                    <pack side="right" />
+                    <button id="options-button-abort" padx="3" text="Abbrechen">
+                        <pack />
+                    </button>
+                </frame>
+            </frame>
+        </frame>
+    </toplevel>
+</gui>
