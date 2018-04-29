@@ -175,14 +175,15 @@ class TkBase(object):
                 be removed from the xml element.
         """
         for method in self.methodTo1Option:
-            method_ = getattr(self, method)
-            method_(xml.attrib[method])
-            if remove:
-                del xml.attrib[method]
+            if self.methodTo1Option[method] in xml.attrib:
+                method_ = getattr(self, method)
+                method_(xml.attrib[method])
+                if remove:
+                    del xml.attrib[method]
 
     def handle2ParamMethods(self, xml, remove=True):
         """
-        Tries to call all defined 2 PArameter Methods.
+        Tries to call all defined 2 Parameter Methods.
 
         Parameters
         ----------
@@ -589,6 +590,9 @@ class TkEntry(tk.Entry, TkWidget):
             self.setOptions(xml.attrib)
             self.organize(xml)
 
+    def getText(self):
+        return self.__v.get()
+
     def getTextValue(self, xml):
         """
         Returns the Text Attribute Value if present and removes it.
@@ -829,7 +833,10 @@ class TkToplevel(tk.Toplevel, TkBase):
         tk.Toplevel.__init__(self, master=root)
         TkBase.__init__(self)
 
-        self.methodTo1Option = {"title": "wm_title"}
+        self.methodTo1Option = {"geometry": "geometry", "title": "title"}
+        self.methodTo2Options = {"maxsize": ("maxsize-x", "maxsize-y"),
+                                 "minsize": ("minsize-x", "minsize-y"),
+                                 "resizable": ("resizable-x", "resizable-y")}
 
         self.setOptions(xml)
 
@@ -843,6 +850,7 @@ class TkToplevel(tk.Toplevel, TkBase):
         @Todo: Should be the TkBase.setOptions()!!
         """
         self.handle1ParamMethods(xml)
+        self.handle2ParamMethods(xml)
 
         TkBase.setOptions(self, xml.attrib)
 
@@ -872,11 +880,10 @@ class TkWindow(tk.Tk, TkBase):
         """
         tk.Tk.__init__(self)
         TkBase.__init__(self)
-        self.methodTo1Option = {"title": "title"}
+        self.methodTo1Option = {"geometry": "geometry", "title": "title"}
         self.methodTo2Options = {"maxsize": ("maxsize-x", "maxsize-y"),
                                  "minsize": ("minsize-x", "minsize-y"),
-                                 "resizeable": ("resizeable-x",
-                                                "resizeable-y")}
+                                 "resizable": ("resizable-x", "resizable-y")}
         self.setOptions(element)
 
     def setOptions(self, xml):
