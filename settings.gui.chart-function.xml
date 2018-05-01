@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gui>
-    <toplevel geometry="400x450" resizable-x="False" resizable-y="False" takefocus="True" title="New Table Options">
+    <toplevel geometry="400x450" resizable-x="False" resizable-y="False" takefocus="True" title="Function Chart Options">
         <frame bd="2" padx="10" pady="10" relief="sunken">
             <pack expand="True" fill="both" />
             <row num="0" weight="1" />
@@ -10,20 +10,43 @@
                 <grid column="0" sticky="wnes" row="0">
                     <column num="0" weight="1" />
                 </grid>
-                <labelframe padx="5" pady="7" text="Dimension">
+                <labelframe padx="5" pady="7" text="Beschriftung">
                     <grid column="0" sticky="wne" row="0">
                         <column num="0" weight="1" />
                     </grid>
-                    <label text="Anzahl Spalten:">
+                    <label text="Diagramm Titel">
                         <grid column="0" sticky="w" row="0" />
                     </label>
-                    <entry id="options-new-table-cols" textvariable=" ">
+                    <entry id="options-chart-title-chart" textvariable=" ">
                         <grid column="0" sticky="nwe" row="1" />
                     </entry>
-                    <label text="Anzahl Zeilen:">
+                    <label text="Abszissenachse:">
                         <grid column="0" sticky="w" row="2" />
                     </label>
-                    <entry id="options-new-table-rows" textvariable=" ">
+                    <entry id="options-chart-title-abscissa" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="3" />
+                    </entry>
+                    <label text="Ordinatenachse:">
+                        <grid column="0" sticky="w" row="4" />
+                    </label>
+                    <entry id="options-chart-title-ordinate" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="5" />
+                    </entry>
+                </labelframe>
+                <labelframe padx="5" pady="7" text="Splines">
+                    <grid column="0" sticky="wne" row="1">
+                        <column num="0" weight="1" />
+                    </grid>
+                    <label text="Splines aktiviert:">
+                        <grid column="0" sticky="w" row="0" />
+                    </label>
+                    <checkbutton id="options-chart-splines" textvariable=" ">
+                        <grid column="0" sticky="w" row="1" />
+                    </checkbutton>
+                    <label text="Neue Länge:">
+                        <grid column="0" sticky="w" row="2" />
+                    </label>
+                    <entry id="options-chart-splines-new-length" textvariable=" ">
                         <grid column="0" sticky="nwe" row="3" />
                     </entry>
                 </labelframe>
@@ -42,7 +65,7 @@
                 </grid>
                 <frame>
                     <pack side="right" />
-                    <button id="options-button-new-table" padx="3" text="Erstellen">
+                    <button id="options-button-chart-function" padx="3" text="Erstellen">
                         <pack />
                     </button>
                 </frame>

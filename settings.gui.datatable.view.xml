@@ -3,7 +3,7 @@
     <window bg="#EFEFEF" title="FFHS - AWD - PVA 2">
         <frame>
             <pack expand="True" fill="both" side="top" />
-            <frame bd="1" bg="#eee" relief="sunken">
+            <frame bd="1" bg="#eee" id="toolbar-wrapper" relief="sunken">
                 <pack fill="x" side="top" />
                 <button id="toolbar-button-nfi" height="18" width="18">
                     <pack side="left" />
@@ -17,9 +17,14 @@
                     <pack side="left" />
                     <image height="16" path="/ctsoft/gui/icons/open-folder_grey_16_16.png" width="16" />
                 </button>
-                <label text="toolbar">
+                <button id="toolbar-button-ncf" height="18" width="18">
                     <pack side="left" />
-                </label>
+                    <image height="16" path="/ctsoft/gui/icons/chart-line_grey_16_16.png" width="16" />
+                </button>
+                <button id="toolbar-button-splines" height="18" width="18">
+                    <pack side="left" />
+                    <image height="16" path="/ctsoft/gui/icons/code_grey_16_16.png" width="16" />
+                </button>
             </frame>
             <frame bg="#eee">
                 <pack expand="True" fill="both" side="top" />
@@ -36,7 +41,7 @@
                     <content>
                         <frame bd="1" bg="grey" id="datatable-content-wrapper" relief="sunken">
                             <pack expand="True" fill="both" side="top" />
-                            <frame id="datatable-content">
+                            <frame bg="red" id="datatable-content">
                                 <pack anchor="nw" expand="False" />
                                 <button id="datatable-content-0-0" padx="2" text=" ">
                                     <grid column="0" row="0" sticky="nsew" />
@@ -49,7 +54,7 @@
                                         <!--<column num="0" uniform="g1" weight="1" />-->
                                     </grid>
                                 </button>
-                                <entry id="datatable-content-1-1" text="dsjnvdlsk skvnsdl vnsdlkvlsd vlsdv lsdjlvsdvl">
+                                <entry id="datatable-content-1-1" text="">
                                     <grid column="1" row="1" sticky="nsew">
                                         <!--<column num="0" uniform="g2" weight="1" />-->
                                     </grid>

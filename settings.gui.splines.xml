@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <toplevel geometry="400x450" resizable-x="False" resizable-y="False" takefocus="True" title="Function Chart Options">
+        <frame bd="2" padx="10" pady="10" relief="sunken">
+            <pack expand="True" fill="both" />
+            <row num="0" weight="1" />
+            <row num="1" weight="0" />
+            <row num="2" weight="0" />
+            <frame bd="2" padx="10" pady="10" relief="raised">
+                <grid column="0" sticky="wnes" row="0">
+                    <column num="0" weight="1" />
+                </grid>
+                <labelframe padx="5" pady="7" text="Original Daten">
+                    <grid column="0" sticky="wne" row="0">
+                        <column num="0" weight="1" />
+                    </grid>
+                    <label text="Startwert:">
+                        <grid column="0" sticky="w" row="0" />
+                    </label>
+                    <entry id="options-splines-starting-point" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="1" />
+                    </entry>
+                    <label text="Endwert:">
+                        <grid column="0" sticky="w" row="2" />
+                    </label>
+                    <entry id="options-splines-end-point" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="3" />
+                    </entry>
+                    <label text="Anzahl Werte:">
+                        <grid column="0" sticky="w" row="2" />
+                    </label>
+                    <entry id="options-splines-count" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="3" />
+                    </entry>
+                    <label text="Formel (Bitte nach Python Schreibweise eingeben):">
+                        <grid column="0" sticky="w" row="4" />
+                    </label>
+                    <entry id="options-splines-formula" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="5" />
+                    </entry>
+                </labelframe>
+                <labelframe padx="5" pady="7" text="Interpolierte Daten">
+                    <grid column="0" sticky="wne" row="0">
+                        <column num="0" weight="1" />
+                    </grid>
+                    <label text="Startwert:">
+                        <grid column="0" sticky="w" row="0" />
+                    </label>
+                    <entry id="options-splines-new-starting-point" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="1" />
+                    </entry>
+                    <label text="Endwert:">
+                        <grid column="0" sticky="w" row="2" />
+                    </label>
+                    <entry id="options-splines-new-end-point" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="3" />
+                    </entry>
+                    <label text="Anzahl Werte:">
+                        <grid column="0" sticky="w" row="2" />
+                    </label>
+                    <entry id="options-splines-new-count" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="3" />
+                    </entry>
+                    <label text="Formel (Bitte nach Python Schreibweise eingeben):">
+                        <grid column="0" sticky="w" row="4" />
+                    </label>
+                    <entry id="options-splines-formula" textvariable=" ">
+                        <grid column="0" sticky="nwe" row="5" />
+                    </entry>
+                </labelframe>
+            </frame>
+            <frame pady="9">
+                <grid column="0" sticky="esw" row="1">
+                    <column num="0" weight="1" />
+                </grid>
+                <label text=" ">
+                    <pack />
+                </label>
+            </frame>
+            <frame>
+                <grid column="0" sticky="esw" row="1">
+                    <column num="0" weight="1" />
+                </grid>
+                <frame>
+                    <pack side="right" />
+                    <button id="options-button-splines" padx="3" text="Erstellen">
+                        <pack />
+                    </button>
+                </frame>
+                <frame padx="10">
+                    <pack side="right" />
+                    <button id="options-button-abort" padx="3" text="Abbrechen">
+                        <pack />
+                    </button>
+                </frame>
+            </frame>
+        </frame>
+    </toplevel>
+</gui>
