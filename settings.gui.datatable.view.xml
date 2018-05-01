@@ -21,10 +21,10 @@
                     <pack side="left" />
                     <image height="16" path="/ctsoft/gui/icons/chart-line_grey_16_16.png" width="16" />
                 </button>
-                <button id="toolbar-button-splines" height="18" width="18">
+<!--                <button id="toolbar-button-splines" height="18" width="18">
                     <pack side="left" />
                     <image height="16" path="/ctsoft/gui/icons/code_grey_16_16.png" width="16" />
-                </button>
+                </button>-->
             </frame>
             <frame bg="#eee">
                 <pack expand="True" fill="both" side="top" />

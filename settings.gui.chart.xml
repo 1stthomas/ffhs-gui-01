@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
+    <toplevel geometry="570x400" resizable-x="False" resizable-y="False" takefocus="True" title="Chart">
+        <frame bd="2" id="chart-window-wrapper" padx="10" pady="10" relief="sunken">
+            <pack expand="True" fill="both" />
+            <canvas id="chart-wrapper">
+                <pack expand="True" fill="both" />
+            </canvas>
+        </frame>
+    </toplevel>
+</gui>

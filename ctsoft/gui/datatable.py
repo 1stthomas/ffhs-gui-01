@@ -17,6 +17,99 @@ import ctsoft.gui.xml as ctsxml
 import ctsoft.math1.calculator as ctscal
 
 
+class ChartWindow(object):
+    def __init__(self, root, fName="", parameters=None):
+        self.__widgets = {}
+        self.__window = None
+
+        self.setParameters(parameters)
+        self.setRoot(root)
+        self.setFileName(fName)
+
+    def addWidget(self, key, widget):
+        self.__widgets[key] = widget
+
+    def createChart(self, fName="", parent=None):
+        attributes = {}
+        if fName is "":
+            fName = self.getFileName()
+
+        if parent is None:
+            parent = self.getWrapperChart()
+
+        imgXml = xmlee.Element('image')
+        imgXml.attrib["path"] = fName
+        imgXml.attrib["anchor"] = "nw"
+        if "height" in attributes:
+            imgXml.attrib["height"] = attributes["height"]
+        else:
+            imgXml.attrib["height"] = "360"
+        if "width" in attributes:
+            imgXml.attrib["width"] = attributes["width"]
+        else:
+            imgXml.attrib["width"] = "576"
+        parent.setImage(imgXml)
+
+    def createWindow(self):
+        root = self.getRoot()
+        parameters = self.getParameters()
+        parameters.setParent(None)
+        parser = parameters.getParser()
+        parser.setController(self)
+        xml = parser.getFileContent("settings.gui.chart.xml")
+        xmlTopLevel = xml.find("*")
+
+        top = parser.parseXml(xmlTopLevel, root)
+        top.state(newstate="withdrawn")
+        self.setWindow(top)
+        return top
+
+    def destroy(self):
+        top = self.getWindow()
+        top.destroy()
+
+    def display(self):
+        top = self.getWindow()
+        top.focus_force()
+        top.state(newstate="normal")
+
+    def getFileName(self):
+        return self.__fName
+
+    def getParameters(self):
+        return self.__parameters
+
+    def getRoot(self):
+        return self.__root
+
+    def getWidget(self, key):
+        return self.__widgets[key]
+
+    def getWidgets(self):
+        return self.__widgets
+
+    def getWindow(self):
+        return self.__window
+
+    def getWrapperChart(self):
+        return self.__widgets["chart-wrapper"]
+
+    def getWrapperWindow(self):
+        return self.__widgets["chart-window-wrapper"]
+
+    def setFileName(self, fName):
+        self.__fName = fName
+
+    def setParameters(self, parameters):
+        self.__parameters = parameters
+
+    def setRoot(self, root):
+        self.__root = root
+
+    def setWindow(self, window):
+        self.__window = window
+
+
 class DataCell(object):
     def __init__(self, parameters, value=""):
         self.__value = tk.StringVar(value="")
@@ -276,7 +369,6 @@ class DataField(object):
 
     def loadData(self):
         data = self.getFileContent()
-        print("df.loadData() >>> ", data)
         self.setData(data)
 
     def raiseError(self):
@@ -362,9 +454,8 @@ class Dt(object):
         self.destroyDataTableContent(0)
 
         df = DataField(parameters, 1, fName)
+        self.__data = []
         self.__data.append(df)
-
-        print(self.__widgets)
 
     def addDataFieldByNewTable(self, cols, rows):
         parameters = self.getParameters()
@@ -383,9 +474,8 @@ class Dt(object):
             data.append(cells)
 
         df = DataField(parameters, 1, "", data)
+        self.__data = []
         self.__data.append(df)
-
-        print(self.__widgets)
 
     def addWidget(self, key, widget):
         self.__widgets[key] = widget
@@ -393,7 +483,9 @@ class Dt(object):
     def createChartFunction(self, options):
         calc = ctscal.Calculator()
         data = self.getDataByIndex(0)
-        calc.createChartFunction(data.getColumns(), options)
+        fName = calc.createChartFunction(data.getColumns(), options)
+        print(fName)
+        self.createChartView(fName)
 
     def closeOptions(self):
         cOption = self.getCurrentOptionWindow()
@@ -406,7 +498,13 @@ class Dt(object):
         self.__view = view
         self.__root = view.create()
 
-        print(view.getWidgets())
+    def createChartView(self, fName):
+        parameters = self.getParameters()
+        root = self.getRoot()
+        view = ChartWindow(root, "function_plot.jpg", parameters)
+        view.createWindow()
+        view.createChart()
+        view.display()
 
     def destroyDataTableContent(self, index):
         df = self.getDataByIndex(index)
@@ -655,8 +753,8 @@ class View(object):
         ncfButton = self.getChartFunctionButton()
         ncfButton.configure(command=dt.showChartFunctionOptions)
 
-        splinesButton = self.getSplinesButton()
-        splinesButton.configure(command=dt.showSplinesOptions)
+#        splinesButton = self.getSplinesButton()
+#        splinesButton.configure(command=dt.showSplinesOptions)
 
 
 class Parameters(object):

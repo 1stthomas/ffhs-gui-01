@@ -138,7 +138,6 @@ class ChartFunction(Options):
 
         btnCreate = self.getWidget("options-button-chart-function")
         btnCreate.configure(command=self.create)
-        print(self.getWidgets())
 
 
 class NewTable(Options):
