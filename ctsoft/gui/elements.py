@@ -552,6 +552,20 @@ class TkCheckbutton(tk.Checkbutton, TkWidgetSimple):
         tk.Checkbutton.__init__(self, master)
         TkWidgetSimple.__init__(self, master, *args, **kw)
 
+        self.__variable = None
+
+        self.setValue()
+
+    def getValue(self):
+        return self.__variable.get()
+
+    def setValue(self, val=None):
+        if val is None:
+            val = 0
+
+        self.__variable = tk.IntVar(val)
+        self.configure(variable=self.__variable)
+
 
 class TkEntry(tk.Entry, TkWidget):
     """
