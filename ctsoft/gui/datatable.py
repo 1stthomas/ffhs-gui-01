@@ -14,6 +14,7 @@ import xml.etree.ElementTree as xmlee
 import ctsoft.gui.elements as ctsel
 import ctsoft.gui.options as ctsop
 import ctsoft.gui.xml as ctsxml
+import ctsoft.math1.calculator as ctscal
 
 
 class DataCell(object):
@@ -51,8 +52,13 @@ class DataCell(object):
     def getParameters(self):
         return self.__parameters
 
-    def getValue(self):
-        return self.__value.get()
+    def getValue(self, dataType="string"):
+        if dataType is "int":
+            return int(self.__value.get())
+        elif dataType is "float":
+            return float(self.__value.get())
+        else:
+            return self.__value.get()
 
     def getWidget(self):
         return self.__widget
@@ -107,11 +113,11 @@ class DataColumn(object):
     def getParameters(self):
         return self.__parameters
 
-    def getValues(self):
+    def getValues(self, dataType="string"):
         cells = self.getCells()
         values = []
         for cell in cells:
-            values.append(cell.getValue())
+            values.append(cell.getValue(dataType))
         return values
 
     def setParameters(self, parameters):
