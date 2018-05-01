@@ -104,15 +104,46 @@ class Options(object):
         self.__xml = xml
 
 
-class NewTable(Options):
+class ChartFunction(Options):
     def __init__(self, dt, root, settings, xml=None):
-        super(NewTable, self).__init__(dt, root, settings, xml)
+        super().__init__(dt, root, settings, xml)
+
+    def create(self):
+        dt = self.getController()
+
+        chartTitleWidget = self.getWidget("options-chart-title-chart")
+        chartTitle = chartTitleWidget.get()
+
+        abscissaWidget = self.getWidget("options-chart-title-abscissa")
+        abscissa = abscissaWidget.get()
+
+        ordinateWidget = self.getWidget("options-chart-title-ordinate")
+        ordinate = ordinateWidget.get()
+
+        splinesCheckWidget = self.getWidget("options-chart-splines")
+        splinesCheck = splinesCheckWidget.getValue()
+
+        splinesLenWidget = self.getWidget("options-chart-splines-new-length")
+        splinesNewLen = splinesLenWidget.get()
+
+        d = {"chart-title": chartTitle, "abscissa-title": abscissa,
+             "ordinate-title": ordinate, "splines-check": splinesCheck,
+             "splines-new-len": splinesNewLen}
+
+        dt.createChartFunction(d)
+        dt.closeOptions()
 
     def setupButtons(self):
         Options.setupButtons(self)
 
-        btnCreate = self.getWidget("options-button-new-table")
+        btnCreate = self.getWidget("options-button-chart-function")
         btnCreate.configure(command=self.create)
+        print(self.getWidgets())
+
+
+class NewTable(Options):
+    def __init__(self, dt, root, settings, xml=None):
+        super().__init__(dt, root, settings, xml)
 
     def create(self):
         dt = self.getController()
@@ -125,3 +156,23 @@ class NewTable(Options):
 
         dt.addDataFieldByNewTable(cols, rows)
         dt.closeOptions()
+
+    def setupButtons(self):
+        Options.setupButtons(self)
+
+        btnCreate = self.getWidget("options-button-new-table")
+        btnCreate.configure(command=self.create)
+
+
+class Splines(Options):
+    def __init__(self, dt, root, settings, xml=None):
+        super().__init__(dt, root, settings, xml)
+
+    def create(self):
+        pass
+
+    def setupButtons(self):
+        Options.setupButtons(self)
+
+        btnCreate = self.getWidget("options-button-splines")
+        btnCreate.configure(command=self.create)

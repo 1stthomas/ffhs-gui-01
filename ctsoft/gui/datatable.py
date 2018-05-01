@@ -390,6 +390,11 @@ class Dt(object):
     def addWidget(self, key, widget):
         self.__widgets[key] = widget
 
+    def createChartFunction(self, options):
+        calc = ctscal.Calculator()
+        data = self.getDataByIndex(0)
+        calc.createChartFunction(data.getColumns(), options)
+
     def closeOptions(self):
         cOption = self.getCurrentOptionWindow()
         cOption.destroy()
