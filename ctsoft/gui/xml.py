@@ -5,7 +5,6 @@ Created on Sun Mar  4 14:46:05 2018
 @author: ctsoft
 """
 
-import tkinter as tk
 import xml.etree.ElementTree as xmlee
 import ctsoft.gui.elements as ctsel
 import ctsoft.gui.extensions as ctsex

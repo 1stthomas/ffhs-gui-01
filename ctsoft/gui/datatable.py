@@ -484,7 +484,6 @@ class Dt(object):
         calc = ctscal.Calculator()
         data = self.getDataByIndex(0)
         fName = calc.createChartFunction(data.getColumns(), options)
-        print(fName)
         self.createChartView(fName)
 
     def closeOptions(self):

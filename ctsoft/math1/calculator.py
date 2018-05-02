@@ -37,11 +37,9 @@ class Calculator(object):
 
     def createChartFunction(self, values, options):
         fName = 'function_plot.jpg'
-        print("options: ", options)
         cols = []
         for col in values:
             cols.append(col.getValues("float"))
-        print(cols)
 
         chartTitle = options["chart-title"]
         abscissaTitle = options["abscissa-title"]
@@ -57,7 +55,6 @@ class Calculator(object):
             f2 = interp1d(cols[0], cols[1], kind='cubic')
             plt.plot(cols[0], cols[1], 'o', newX, f1(newX), '-',
                      newX, f2(newX), '--')
-#            plt.plot(newX, f2(newX), '--')
             plt.legend(['data', 'linear', 'cubic'], loc='best')
         else:
             plt.plot(cols[0], cols[1], 'o')
