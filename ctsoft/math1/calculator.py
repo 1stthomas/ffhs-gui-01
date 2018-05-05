@@ -36,7 +36,7 @@ class Calculator(object):
         return outputObj
 
     def createChartFunction(self, values, options):
-        fName = 'function_plot.jpg'
+        fName = "function_plot.jpg"
         cols = []
         for col in values:
             cols.append(col.getValues("float"))
@@ -49,16 +49,31 @@ class Calculator(object):
 
         fig = plt.figure()
 
+        index = 1
+        colNum = len(cols) - 1
+        legend = []
+
         if splinesCheck == 1:
             newX = np.linspace(min(cols[0]), max(cols[0]), newLen)
-            f1 = interp1d(cols[0], cols[1])
-            f2 = interp1d(cols[0], cols[1], kind='cubic')
-            plt.plot(cols[0], cols[1], 'o', newX, f1(newX), '-',
-                     newX, f2(newX), '--')
-            plt.legend(['data', 'linear', 'cubic'], loc='best')
+
+            while index <= colNum:
+                f1 = interp1d(cols[0], cols[index])
+                f2 = interp1d(cols[0], cols[index], kind="cubic")
+                plt.plot(cols[0], cols[index], 'o', newX, f1(newX), '-',
+                         newX, f2(newX), '--')
+                index += 1
+                legend += ["data " + str(index - 1),
+                           "linear " + str(index - 1),
+                           "cubic " + str(index - 1)]
+
+            plt.legend(legend, loc='best')
         else:
-            plt.plot(cols[0], cols[1], 'o')
-            plt.legend(['data'], loc='best')
+            while index <= colNum:
+                plt.plot(cols[0], cols[index], 'o')
+                legend += ["data " + str(index)]
+                index += 1
+
+            plt.legend(legend, loc="best")
 
         if chartTitle is not "":
             fig.suptitle(chartTitle)
