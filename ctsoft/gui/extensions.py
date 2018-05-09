@@ -580,11 +580,6 @@ class ContainerTabs(object):
             # Therefor an empty notebook widget is not allowed.
             raise ValueError("No tabs found under the tabs element")
 
-        # Prepare the parser for the use on adding tabs.
-        parser = self.getParser()
-        parser.setController(self)
-        self.setParser(parser)
-
         for xmlTab in xmlTabs:
             # Create the tabs.
             self.addTab(self.__base, xmlTab)

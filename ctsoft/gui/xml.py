@@ -26,8 +26,12 @@ class Parser(object):
         Creates the GUI elements.
     getFileContent :
         Returns the content of an XML file as an xml.etree.ElementTree.
+    getController :
+        Returns the controller.
     parseXml :
         Parses the XML elements and calls the builder with the found elements.
+    setController :
+        Sets the controller.
     setIdentifier :
         Sets the identifier definition.
     """
@@ -108,6 +112,17 @@ class Parser(object):
             print("The Element ", self.__content.tag, " is unkown.")
             return None
 
+    def getController(self):
+        """
+        Returns the defined Controller
+
+        Returns
+        -------
+        object : A controller which has the addWidget Method implemented
+            to collect the created widgets.
+        """
+        return self.__controller
+
     def getFileContent(self, filename):
         """
         Returns the parsed XML content of the submitted Filename.
@@ -139,6 +154,7 @@ class Parser(object):
         """
         doRec = self.__builder.create(element, parent)
         parent = self.__builder.getCurrent()
+        self.__builder.setParser(self)
         if self.check4Id(element) is True:
             self.addElementById(element, parent)
 
@@ -169,9 +185,27 @@ class Parser(object):
         return parent
 
     def setContent(self, content):
+        """
+        Sets the Content to parse through.
+
+        Parameters
+        ----------
+        content : xml.etree.ElementTree
+            The content with the defined elements to create the widgets.
+        """
         self.__content = content
 
     def setController(self, controller):
+        """
+        Sets the Controller which must have the addWidget Method implemented
+        to collect the Widgets with a defined identifier.
+
+        Parameters
+        ----------
+        controller : object
+            The controller to collect the elements with the qualified
+            identifier.
+        """
         self.__controller = controller
 
     def setIdentifier(self, identifier):
@@ -217,6 +251,7 @@ class Builder:
         self.__current = None
         self.__doChangeParent = False
         self.__doChangeXml = False
+        self.__parser = None
         self.__root = None
         self.__rootName = "gui"
         self.__skippedWidgets = ["column", "grid", "image", "pack", "row"]
@@ -298,7 +333,8 @@ class Builder:
             self.__changedXml = self.__current.getXmlContent()
         elif xml.tag == "tabs":
             self.__current = ctsex.ContainerTabs(parent, xml)
-            self.__current.setParser(Parser(self, ""))
+            parser = self.getParser()
+            self.__current.setParser(parser)
             self.__current.createWidgets()
             return False
         elif xml.tag == self.__windowName:
@@ -328,6 +364,9 @@ class Builder:
         object : The current widget of the builder instance.
         """
         return self.__current
+
+    def getParser(self):
+        return self.__parser
 
     def getRoot(self):
         """
@@ -399,3 +438,6 @@ class Builder:
             One of the Tkinter extensions in the ctsoft.gui.elements modul.
         """
         self.__current = current
+
+    def setParser(self, parser):
+        self.__parser = parser
