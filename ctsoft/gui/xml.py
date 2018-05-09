@@ -59,7 +59,7 @@ class Parser(object):
 
     def addElementById(self, elementXml, elementTk):
         """
-        Adds an Tkinter widget to the GUI controller collection
+        Adds an Tkinter Widget to the defined Controller collection.
 
         Parameters
         ----------
@@ -296,6 +296,11 @@ class Builder:
             self.__changedParent = self.__current.getChangedParent()
             self.__doChangeXml = True
             self.__changedXml = self.__current.getXmlContent()
+        elif xml.tag == "tabs":
+            self.__current = ctsex.ContainerTabs(parent, xml)
+            self.__current.setParser(Parser(self, ""))
+            self.__current.createWidgets()
+            return False
         elif xml.tag == self.__windowName:
             self.__current = ctsel.TkWindow(xml)
             self.__root = self.__current

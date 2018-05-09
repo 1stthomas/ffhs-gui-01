@@ -213,7 +213,7 @@ class ContainerScrollable(object):
         for xmlScrollbar in xmlScrollbars:
             self.createScrollbarWidget(parent, xmlScrollbar)
 
-        # Define the row and column behavior on resizing.
+        # Define the row and column behavior of the grid manager.
         parent.rowconfigure(0, weight=1)
         parent.rowconfigure(1, weight=0)
         parent.columnconfigure(0, weight=1)
@@ -223,6 +223,7 @@ class ContainerScrollable(object):
                                                  anchor="nw",
                                                  tags="self.__frame")
 
+        # Bind the event handler to the desired events.
         frame.bind("<Configure>", self._onFrameConfigure)
         frame.bind('<Enter>', self._bindMousewheel)
         frame.bind('<Leave>', self._unbindMousewheel)
@@ -438,6 +439,7 @@ class ContainerScrollable(object):
         canvasHeight = event.height
         canvasWidth = event.width
 
+        # Get the new canvas dimensions
         if canvasWidth <= frame.winfo_reqwidth():
             canvasWidth = frame.winfo_reqwidth()
         if canvasHeight <= frame.winfo_reqheight():
@@ -486,6 +488,205 @@ class ContainerScrollable(object):
         """
         canvas = self.getCanvas()
         canvas.unbind_all("<MouseWheel>")
+
+
+class ContainerTabs(object):
+    """
+    Extension to show Tabs.
+    This Extension uses the ttk.Notebook Widget.
+
+    Methods
+    -------
+    addTab :
+        Adds a Tab to the notebook.
+    createWidgets :
+        Starting to build the notebook with tabs
+    getBase :
+        Returns the notebook widget.
+    getParent :
+        Returns the parent of the notebook widget.
+    getParser :
+        Returns the parser object.
+    getXml :
+        Returns the XML definitions of this notebook.
+    manageLayout :
+        Sets the defined layout manager, or an empty pack as default.
+    setParent :
+        Sets the parent of the notebook widget.
+    setParser :
+        Sets the parser.
+    setXml :
+        Sets the XML with the element definitions of the notebook.
+    """
+    def __init__(self, master, xml, *args, **kw):
+        """
+        Instanciates a ContainerTab.
+
+        Parameters
+        ----------
+        master : object
+            One of the Tkinter widget elements in this module as parent
+            of the new notebook widget.
+        element : xml.etree.ElementTree
+            The element definitions of the new notebook.
+        """
+        print(*args)
+        print(**kw)
+        self.__base = None
+        self.__parent = None
+        self.__parser = None
+        self.__tabs = {}
+        self.__xml = None
+
+        self.setParent(master)
+        self.setXml(xml)
+
+    def addTab(self, parent, xml):
+        """
+        Creates a Tab as defined and adds it to the Notebook Widget.
+
+        Parameters
+        ----------
+        parent : ctsoft.gui.elements.TtkNotebook
+            The notebook widget.
+        """
+        parser = self.getParser()
+        xmlInner = xml.find("*")
+        tab = parser.parseXml(xmlInner, parent)
+        tabText = xml.attrib.get("text", "")
+        parent.add(tab, text=tabText)
+
+    def createWidgets(self):
+        """ Creates the Notebook Widget with its Content. """
+        xml = self.getXml()
+        if str(xml.tag) != "tabs":
+            # This error should not be raised if the process is comming from
+            # the ctsoft.gui.xml.builder
+            raise ValueError("The needed XML element is \"tabs\", ",
+                             "found %s" % xml.tag)
+
+        # Grab the parent of the notebook widget.
+        parent = self.getParent()
+
+        # create the notebook widget.
+        self.__base = ctsel.TtkNotebook(parent, xml)
+        # layout manager
+        self.manageLayout(self.__base, xml)
+
+        xmlTabs = xml.findall("tab")
+
+        if not xmlTabs:
+            # if no tabs for the notebook were defined.
+            # Therefor an empty notebook widget is not allowed.
+            raise ValueError("No tabs found under the tabs element")
+
+        # Prepare the parser for the use on adding tabs.
+        parser = self.getParser()
+        parser.setController(self)
+        self.setParser(parser)
+
+        for xmlTab in xmlTabs:
+            # Create the tabs.
+            self.addTab(self.__base, xmlTab)
+
+    def getBase(self):
+        """
+        Returns the Notebook widget if it is already created.
+
+        Returns
+        -------
+        ctsoft.gui.elements.TtkNotebook : The the notebook widget.
+        """
+        return self.__base
+
+    def getParent(self):
+        """
+        Returns the Parent widget of the Notebook widget.
+
+        Returns
+        -------
+        object : The parent widget of the notebook.
+        """
+        return self.__parent
+
+    def getParser(self):
+        """
+        Returns the current XML Parser.
+
+        Returns
+        -------
+        ctsoft.gui.xml.Parser : The XML Parser.
+        """
+        return self.__parser
+
+    def getXml(self):
+        """
+        Returns the XML Definitions of the Notebook widget.
+
+        Returns
+        -------
+        xml.etree.ElementTree : The parent widget of the notebook.
+        """
+        return self.__xml
+
+    def manageLayout(self, widget, xml):
+        """
+        Sets the Layout Manager if defined. Default Manager is pack.
+
+        Parameters
+        ----------
+        widget : object
+            An extended tkinter widget which will be layout managed.
+        xml : xml.etree.ElementTree
+            The XML element of the current widget.
+        """
+        xmlGrid = xml.find("grid")
+
+        if xmlGrid:
+            # row- and column-configure is not implemented atm.
+            widget.grid(xmlGrid.attrib)
+        else:
+            xmlPack = xml.find("pack")
+
+            if xmlPack:
+                # use the founded pack definitions
+                widget.pack(xmlPack.attrib)
+            else:
+                # sue the pack manager as the default.
+                widget.pack()
+
+    def setParent(self, parent):
+        """
+        Sets the Parent widget of the Notebook widget.
+
+        Parameters
+        ----------
+        parent : object
+            The parent widget of the notebook.
+        """
+        self.__parent = parent
+
+    def setParser(self, parser):
+        """
+        Sets the XML Parser.
+
+        Parameters
+        ----------
+        xml : ctsoft.gui.xml.Parser
+            The XML Parser.
+        """
+        self.__parser = parser
+
+    def setXml(self, xml):
+        """
+        Sets the XML Definitions of the Notebook with its Content.
+
+        Parameters
+        ----------
+        xml : xml.etree.ElementTree
+            The XML definitions of the notebook and its content.
+        """
+        self.__xml = xml
 
 
 class RadiobuttonGroup(object):
