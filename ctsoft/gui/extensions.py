@@ -12,6 +12,7 @@ of them should be removed.
 import tkinter as tk
 import tkinter.ttk as ttk
 import ctsoft.gui.elements as ctsel
+import ctsoft.gui.elementsttk as ctselttk
 
 
 class ContainerScrollable(object):
@@ -569,7 +570,7 @@ class ContainerTabs(object):
         parent = self.getParent()
 
         # create the notebook widget.
-        self.__base = ctsel.TtkNotebook(parent, xml)
+        self.__base = ctselttk.TtkNotebook(parent, xml)
         # layout manager
         self.manageLayout(self.__base, xml)
 

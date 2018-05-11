@@ -8,7 +8,6 @@ Created on Mon Mar  5 18:03:52 2018
 import os
 from PIL import Image, ImageTk
 import tkinter as tk
-import tkinter.ttk as ttk
 from tkinter.font import Font as tkFont
 
 
@@ -914,9 +913,3 @@ class TkWindow(tk.Tk, TkBase):
         self.handle2ParamMethods(xml)
 
         TkBase.setOptions(self, xml.attrib)
-
-
-class TtkNotebook(ttk.Notebook, TkWidget):
-    def __init__(self, master, xml, *args, **kw):
-        ttk.Notebook.__init__(self, master)
-        TkWidget.__init__(self, master, xml, *args, **kw)
