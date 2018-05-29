@@ -120,6 +120,9 @@ class ChartFunction(Options):
         ordinateWidget = self.getWidget("options-chart-title-ordinate")
         ordinate = ordinateWidget.get()
 
+        legendWidget = self.getWidget("options-chart-legend")
+        legend = legendWidget.getValue()
+
         splinesCheckWidget = self.getWidget("options-chart-splines")
         splinesCheck = splinesCheckWidget.getValue()
 
@@ -127,8 +130,8 @@ class ChartFunction(Options):
         splinesNewLen = splinesLenWidget.get()
 
         d = {"chart-title": chartTitle, "abscissa-title": abscissa,
-             "ordinate-title": ordinate, "splines-check": splinesCheck,
-             "splines-new-len": splinesNewLen}
+             "legend": legend, "ordinate-title": ordinate,
+             "splines-check": splinesCheck, "splines-new-len": splinesNewLen}
 
         dt.createChartFunction(d)
         dt.closeOptions()

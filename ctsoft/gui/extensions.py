@@ -3,10 +3,6 @@
 Created on Sun Apr 15 21:41:25 2018
 
 @author: ctsoft
-
-@todo: On ContainerScrollable there are two properties which contain propably
-the same: __changedParent and __frame. If these properties are the same, one
-of them should be removed.
 """
 
 import tkinter as tk
@@ -193,8 +189,8 @@ class ContainerScrollable(object):
 
     def createWidgets(self, xml):
         """
-        Starting Point of the Scrollbar Extension. This Method will call all
-        required Methods.
+        Starting Point of the Scrollbar Extension. All required Methods will be
+        executed to meet the XML definitions.
 
         Parameters
         ----------
@@ -463,7 +459,8 @@ class ContainerScrollable(object):
         event : object
             The configure event of the canvas.
         """
-        self.getCanvas().configure(scrollregion=self.__canvas.bbox("all"))
+        canvas = self.getCanvas()
+        canvas.configure(scrollregion=canvas.bbox("all"))
 
     def _onMousewheel(self, event):
         """

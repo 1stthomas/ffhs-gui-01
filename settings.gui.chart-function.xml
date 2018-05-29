@@ -6,51 +6,71 @@
             <row num="0" weight="1" />
             <row num="1" weight="0" />
             <row num="2" weight="0" />
-            <frame bd="2" padx="10" pady="10" relief="raised">
+            <tabs>
                 <grid column="0" sticky="wnes" row="0">
                     <column num="0" weight="1" />
                 </grid>
-                <labelframe padx="5" pady="7" text="Beschriftung">
-                    <grid column="0" sticky="wne" row="0">
-                        <column num="0" weight="1" />
-                    </grid>
-                    <label text="Diagramm Titel">
-                        <grid column="0" sticky="w" row="0" />
-                    </label>
-                    <entry id="options-chart-title-chart" textvariable=" ">
-                        <grid column="0" sticky="nwe" row="1" />
-                    </entry>
-                    <label text="Abszissenachse:">
-                        <grid column="0" sticky="w" row="2" />
-                    </label>
-                    <entry id="options-chart-title-abscissa" textvariable=" ">
-                        <grid column="0" sticky="nwe" row="3" />
-                    </entry>
-                    <label text="Ordinatenachse:">
-                        <grid column="0" sticky="w" row="4" />
-                    </label>
-                    <entry id="options-chart-title-ordinate" textvariable=" ">
-                        <grid column="0" sticky="nwe" row="5" />
-                    </entry>
-                </labelframe>
-                <labelframe padx="5" pady="7" text="Splines">
-                    <grid column="0" sticky="wne" row="1">
-                        <column num="0" weight="1" />
-                    </grid>
-                    <label text="Splines aktiviert:">
-                        <grid column="0" sticky="w" row="0" />
-                    </label>
-                    <checkbutton id="options-chart-splines" textvariable=" ">
-                        <grid column="0" sticky="w" row="1" />
-                    </checkbutton>
-                    <label text="Neue Länge:">
-                        <grid column="0" sticky="w" row="2" />
-                    </label>
-                    <entry id="options-chart-splines-new-length" textvariable=" ">
-                        <grid column="0" sticky="nwe" row="3" />
-                    </entry>
-                </labelframe>
-            </frame>
+                <tab text="Beschriftung">
+                    <frame bd="2" padx="10" pady="10" relief="raised">
+                        <grid column="0" sticky="wnes" row="0">
+                            <column num="0" weight="1" />
+                        </grid>
+                        <labelframe padx="5" pady="7" text="Beschriftung">
+                            <grid column="0" sticky="wne" row="0">
+                                <column num="0" weight="1" />
+                            </grid>
+                            <label text="Diagramm Titel">
+                                <grid column="0" sticky="w" row="0" />
+                            </label>
+                            <entry id="options-chart-title-chart" textvariable="">
+                                <grid column="0" sticky="nwe" row="1" />
+                            </entry>
+                            <label text="Abszissenachse:">
+                                <grid column="0" sticky="w" row="2" />
+                            </label>
+                            <entry id="options-chart-title-abscissa" textvariable="">
+                                <grid column="0" sticky="nwe" row="3" />
+                            </entry>
+                            <label text="Ordinatenachse:">
+                                <grid column="0" sticky="w" row="4" />
+                            </label>
+                            <entry id="options-chart-title-ordinate" textvariable="">
+                                <grid column="0" sticky="nwe" row="5" />
+                            </entry>
+                            <label text=" ">
+                                <grid column="0" sticky="w" row="4" />
+                            </label>
+                            <checkbutton id="options-chart-legend" textvariable="Legende anzeigen">
+                                <grid column="0" sticky="nwe" row="6" />
+                            </checkbutton>
+                        </labelframe>
+                    </frame>
+                </tab>
+                <tab text="Extrapolation">
+                    <frame bd="2" padx="10" pady="10" relief="raised">
+                        <grid column="0" sticky="wnes" row="0">
+                            <column num="0" weight="1" />
+                        </grid>
+                        <labelframe padx="5" pady="7" text="Splines">
+                            <grid column="0" sticky="wne" row="1">
+                                <column num="0" weight="1" />
+                            </grid>
+                            <label text="Splines aktiviert:">
+                                <grid column="0" sticky="w" row="0" />
+                            </label>
+                            <checkbutton id="options-chart-splines" textvariable="Splines aktiviert">
+                                <grid column="0" sticky="w" row="1" />
+                            </checkbutton>
+                            <label text="Neue Länge:">
+                                <grid column="0" sticky="w" row="2" />
+                            </label>
+                            <entry id="options-chart-splines-new-length" textvariable="">
+                                <grid column="0" sticky="nwe" row="3" />
+                            </entry>
+                        </labelframe>
+                    </frame>
+                </tab>
+            </tabs>
             <frame pady="9">
                 <grid column="0" sticky="esw" row="1">
                     <column num="0" weight="1" />

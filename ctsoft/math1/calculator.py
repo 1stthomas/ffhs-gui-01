@@ -41,11 +41,12 @@ class Calculator(object):
         for col in values:
             cols.append(col.getValues("float"))
 
-        chartTitle = options["chart-title"]
         abscissaTitle = options["abscissa-title"]
+        chartTitle = options["chart-title"]
+        hasLegend = options["legend"]
+        newLen = options["splines-new-len"]
         ordinateTitle = options["ordinate-title"]
         splinesCheck = options["splines-check"]
-        newLen = options["splines-new-len"]
 
         fig = plt.figure()
 
@@ -66,14 +67,16 @@ class Calculator(object):
                            "linear " + str(index - 1),
                            "cubic " + str(index - 1)]
 
-            plt.legend(legend, loc='best')
+            if hasLegend:
+                plt.legend(legend, loc='best')
         else:
             while index <= colNum:
                 plt.plot(cols[0], cols[index], 'o')
                 legend += ["data " + str(index)]
                 index += 1
 
-            plt.legend(legend, loc="best")
+            if hasLegend:
+                plt.legend(legend, loc="best")
 
         if chartTitle is not "":
             fig.suptitle(chartTitle)
